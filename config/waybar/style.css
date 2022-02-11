@@ -1,0 +1,233 @@
+* {
+    border: none;
+    border-radius: 0;
+    /* `otf-font-awesome` is required to be installed for icons */
+    font-family: "FontAwesome5Free", Roboto, Helvetica, Arial, sans-serif;
+    font-size: 13px;
+    min-height: 0;
+}
+
+window#waybar {
+    background-color: rgba(43, 48, 59, 0.5);
+    color: #ffffff;
+    transition-property: background-color;
+    transition-duration: .5s;
+}
+
+window#waybar.hidden {
+    opacity: 0.2;
+}
+
+/*
+window#waybar.empty {
+    background-color: transparent;
+}
+window#waybar.solo {
+    background-color: #FFFFFF;
+}
+*/
+
+window#waybar.termite {
+    background-color: #3F3F3F;
+}
+
+window#waybar.chromium {
+    background-color: #000000;
+    border: none;
+}
+
+#workspaces {
+    padding:4px;
+}
+
+#workspaces button {
+    padding: 0 5px;
+    background-color: transparent;
+    color: #ffffff;
+    /* Use box-shadow instead of border so the text isn't offset */
+    box-shadow: inset 0 -3px transparent;
+    background-color:rgba(255,255,255,0.2);
+}
+
+#workspaces button:first-child {
+    border-radius:4px 0px 0px 4px;
+}
+#workspaces button:last-child {
+    border-radius:0px 4px 4px 0px;
+}
+
+#workspaces button:hover {
+    background: rgba(61,233,174,0.15);
+    box-shadow: inset 0 -3px rgba(61,233,174,1);
+}
+
+#workspaces button.focused {
+    background-color: rgba(61,233,174,0.4);
+    box-shadow: inset 0 -3px rgba(61,233,174,1);
+}
+
+#workspaces button.urgent {
+    background-color: rgba(233,61,61,0.6);
+}
+
+#workspaces button.persistent {
+    background-color: rgba(0,0,0,0.2);
+}
+
+#mode {
+    background-color: #64727D;
+    border-bottom: 3px solid #ffffff;
+}
+
+#clock,
+#battery,
+#cpu,
+#memory,
+#disk,
+#temperature,
+#backlight,
+#network,
+#pulseaudio,
+#custom-media,
+#tray,
+#mode,
+#idle_inhibitor,
+#mpd,
+#custom-load-avg {
+    padding: 2px 8px;
+    
+    background-color: #64727D;
+    color:#ffffff;
+
+    margin: 4px;
+    border-radius:4px;
+}
+
+#window,
+#workspaces {
+    margin: 0 4px;
+}
+
+/* If workspaces is the leftmost module, omit left margin */
+.modules-left > widget:first-child > #workspaces {
+    margin-left: 0;
+}
+
+/* If workspaces is the rightmost module, omit right margin */
+.modules-right > widget:last-child > #workspaces {
+    margin-right: 0;
+}
+
+#battery.charging, #battery.plugged {
+    color: #ffffff;
+    background-color: rgba(61,233,174,0.5);
+}
+
+@keyframes blink {
+    to {
+        background-color: #ffffff;
+        color: #000000;
+    }
+}
+
+#battery.warning:not(.charging) {
+    background-color: rgba(192,128,32,0.6);
+}
+
+#battery.critical:not(.charging) {
+    background-color: rgba(233,61,61,0.6);
+    color: #ffffff;
+    animation-name: blink;
+    animation-duration: 0.5s;
+    animation-timing-function: linear;
+    animation-iteration-count: infinite;
+    animation-direction: alternate;
+}
+
+label:focus {
+    background-color: #000000;
+}
+
+#cpu.warning {
+    background-color: rgba(192,128,32,0.6);
+}
+#cpu.critical {
+    background-color: rgba(233,61,61,0.6);
+}
+
+#memory.warning {
+    background-color: rgba(192,128,32,0.6);
+}
+#memory.critical {
+    background-color: rgba(233,61,61,0.6);
+}
+
+#disk.warning {
+    background-color: rgba(192,128,32,0.6);
+}
+#disk.critical {
+    background-color: rgba(233,61,61,0.6);
+}
+
+#network {
+    background-color: rgba(61,174,233,0.5);
+}
+
+#network.disconnected {
+    background-color: rgba(233,61,61,0.6);
+}
+
+#pulseaudio {
+    background-color: rgba(61,174,233,0.5);
+}
+
+#pulseaudio.muted {
+    background-color: #64727D;
+}
+
+#custom-media {
+    background-color: #66cc99;
+    color: #2a5c45;
+    min-width: 100px;
+}
+
+#custom-media.custom-spotify {
+    background-color: #66cc99;
+}
+
+#custom-media.custom-vlc {
+    background-color: #ffa000;
+}
+
+#temperature.critical {
+    background-color: rgba(233,61,61,0.6);
+}
+
+#idle_inhibitor.activated {
+    background-color: #ecf0f1;
+    color: #2d3436;
+}
+
+/*
+#language {
+    background: #00b093;
+    color: #740864;
+    padding: 0 5px;
+    margin: 0 5px;
+    min-width: 16px;
+}
+*/
+
+#custom-spacer {
+}
+#custom-launch-term, #custom-launch-firefox, #custom-launch-thunderbird, #custom-launch-pcmanfm, #custom-run {
+    margin:4px;
+    border-radius:4px;
+    background-color:rgba(0,0,0,0.2);
+    padding: 0 4px;
+    min-width:20px;
+}
+#custom-launch-term:hover, #custom-launch-firefox:hover, #custom-launch-thunderbird:hover, #custom-launch-pcmanfm:hover, #custom-run:hover {
+    background-color: rgba(61,233,174,0.4);
+}
+

@@ -1,0 +1,21 @@
+#ignore private configuration
+#because it's private
+#of course
+private-config/
+*.cpt
+
+#NOTE: config/vdirsyncer should now be part of private-config
+#but this is left vestigally just in case
+#ignore config/vdirsyncer directory
+#because the config file contains login information that should not be shown publically
+config/vdirsyncer
+
+#vim swap files
+.*.swp
+#python cache
+*.pyc
+__pycache__
+
+#old git directory kept on local filesystem for archival reasons
+.git_obsolete
+

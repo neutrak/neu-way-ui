@@ -1,0 +1,397 @@
+# Default config for sway
+#
+# Copy this to ~/.config/sway/config and edit it to your liking.
+#
+# Read `man 5 sway` for a complete reference.
+
+### Variables
+#
+# Logo key. Use Mod1 for Alt.
+set $movemod Mod1
+set $actionmod Mod4
+
+# WASD direction keys, like most video games
+set $left a
+set $down s
+set $up w
+set $right d
+
+# Your preferred terminal emulator
+set $term alacritty
+
+# Your preferred web browser
+# firefox, with native wayland support enabled
+#set $browser 'MOZ_ENABLE_WAYLAND=1 firefox' # wayland native firefox (buggy as of 2021-08-31)
+set $browser firefox # x11 firefox (through xwayland)
+
+# Your preferred application launcher
+# Note: pass the final command to swaymsg so that the resulting window can be opened
+# on the original workspace that the command was run on.
+# set $menu dmenu_path | dmenu -l 5 | xargs swaymsg exec --
+# set $menu wofi --show=run --prompt="" --cache-file='/dev/null' --fork
+set $menu rofi -show run -disable-history -lines 8
+
+# Your preferred GUI text editor
+#set $guieditor leafpad
+set $guieditor mousepad
+
+# Your preferred GUI file manager
+set $filemanager pcmanfm
+
+# Color variables
+#set $clr_hglt #3daee9
+#set $clr_white #ffffff
+#set $clr_black #000000
+#set $clr_almost_black #0e0e0e
+#set $clr_almost_white #fdfdfd
+#set $clr_med_gray #888888
+#set $clr_dk_gray #333333
+#set $clr_urgent_border #2f343a
+#set $clr_urgent_bg #900000
+#set $clr_focus_border #4c7899
+#set $clr_focus_bg #285577
+#set $clr_inactive_border $clr_dk_gray
+#set $clr_inactive_bg #5f676a
+
+set $clr_hglt #3de9aed0
+set $clr_white #ffffff
+set $clr_black #000000
+set $clr_almost_black #0e0e0e
+set $clr_almost_white #fdfdfd
+set $clr_med_gray #888888
+set $clr_dk_gray #333333
+set $clr_urgent_border #2f3a34d0
+set $clr_urgent_bg #900000
+set $clr_focus_border #4c9978d0
+set $clr_focus_bg #287755d0
+set $clr_inactive_border $clr_dk_gray
+set $clr_inactive_bg #5f6a67d0
+
+#font config
+font pango:Ubuntu Regular 11
+
+### Output configuration
+#
+# Default wallpaper (more resolutions are available in /usr/share/backgrounds/sway/)
+#output * bg /usr/share/backgrounds/sway/Sway_Wallpaper_Blue_1920x1080.png fill
+output * bg $HOME/.config/custom-themes/neu-way-ui/assets-images-svgs/backgrounds/spirit-willow-tree-reborn.jpg fill
+#output * bg $HOME/.config/custom-themes/neu-way-ui/assets-images-svgs/backgrounds/spirit-willow-tree-old.jpg fill
+
+#
+# Example configuration:
+#
+#   output HDMI-A-1 resolution 1920x1080 position 1920,0
+#
+# You can get the names of your outputs by running: swaymsg -t get_outputs
+
+### Idle configuration
+#
+# Example configuration:
+#
+# exec swayidle -w \
+#		  timeout 300 'swaylock -f -c 000000' \
+#		  timeout 600 'swaymsg "output * dpms off"' resume 'swaymsg "output * dpms on"' \
+#		  before-sleep 'swaylock -f -c 000000'
+#
+# This will lock your screen after 300 seconds of inactivity, then turn off
+# your displays after another 300 seconds, and turn your screens back on when
+# resumed. It will also lock your screen before your computer goes to sleep.
+
+exec swayidle -w timeout 900 'swaylock -f' \
+	timeout 1200 'swaymsg "output * dpms off"' resume 'swaymsg "output * dpms on"' \
+	before-sleep 'swaylock -f'
+
+#run waybar
+#NOTE: we can't use the bar { swaybar_command waybar } configuration
+#because that only allows one waybar instance to run
+#and for our configuration we need two (one on top and one on bottom)
+#NOTE: this init script kills any previously-running instances of waybar before starting waybar
+#so exec_always can be used
+exec_always $HOME/.config/custom-themes/neu-way-ui/scripts/waybar-init.sh
+
+#start bluetooth tray applet
+#exec blueman-tray
+exec 'sleep 5; blueman-applet'
+
+#monitor cpu temperature using a hardware-independent average
+#so we don't need to configure the hwmon setting for each individual core on each individual machine this config is used for
+exec watch -n 2 'echo "$("$HOME"/.config/custom-themes/neu-way-ui/scripts/cpu-temp-avg.sh)*1000" | bc > /tmp/cpu-temp-avg'
+
+#auto-retreive calendar notifications and show notifications for future events using notify-send when appropriate
+#NOTE: this depends on the 'at' utility being installed
+exec_always $HOME/.config/custom-themes/neu-way-ui/scripts/cal-reminders-init.sh
+
+#x11 compatibility for older applications
+xwayland enable
+
+### Input configuration
+#
+# Example configuration:
+#
+#   input "2:14:SynPS/2_Synaptics_TouchPad" {
+#	   dwt enabled
+#	   tap enabled
+#	   natural_scroll enabled
+#	   middle_emulation enabled
+#   }
+#
+# You can get the names of your inputs by running: swaymsg -t get_inputs
+# Read `man 5 sway-input` for more information about this section.
+
+#keymap: US international with altgr dead key
+#aka US english with compose key
+input * {
+	xkb_layout "us"
+	xkb_variant "altgr-intl"
+	xkb_options "compose:ralt"
+}
+
+# Disable focus follows mouse because default config has it on for some reason
+focus_follows_mouse no
+
+### Key bindings
+#
+# Basics:
+#
+	# Start a terminal
+	bindsym $actionmod+t exec $term
+	
+	# Start a web browser
+	bindsym $actionmod+w exec $browser
+	
+	# Start a gui text editor
+	bindsym $actionmod+e exec $guieditor
+	
+	# Start a file manager
+	bindsym $actionmod+f exec $filemanager
+	
+	# Take a screenshot of the whole display
+	bindsym $actionmod+s exec $HOME/.config/custom-themes/neu-way-ui/scripts/screenshot.sh
+	
+	# Take a screenshot of only the current window
+	bindsym $actionmod+Shift+s exec $HOME/.config/custom-themes/neu-way-ui/scripts/screenshot.sh current-window
+
+	# Kill focused window
+	bindsym $actionmod+q kill
+
+	# Start your launcher
+	bindsym $actionmod+r exec $menu
+	
+	# clear clipboard
+	# NOTE: this should work even when the screen is locked!
+	bindsym --locked $actionmod+Backspace exec $HOME/.config/custom-themes/neu-way-ui/scripts/clear-clipboard.sh
+
+	# Drag floating windows by holding down $mod and left mouse button.
+	# Resize them with right mouse button + $mod.
+	# Despite the name, also works for non-floating windows.
+	# Change normal to inverse to use left mouse button for resizing and right
+	# mouse button for dragging.
+	floating_modifier $movemod normal
+
+	# Reload the configuration file
+	bindsym $actionmod+Shift+c reload
+
+	# Exit sway (logs you out of your Wayland session)
+	bindsym $actionmod+Shift+q exec swaynag -t warning -m 'You pressed the exit shortcut. Do you really want to exit sway? This will end your Wayland session.' -b 'Yes, exit sway' 'swaymsg exit'
+
+	#audio control actions should be allowed on the lock screen
+	#we use "bindsym --locked <key binding> exec <command>" to achieve this
+
+	# Audio control
+	bindsym --locked $actionmod+Left exec $HOME/.config/custom-themes/neu-way-ui/scripts/audio-control.sh vol-down
+	bindsym --locked $actionmod+Right exec $HOME/.config/custom-themes/neu-way-ui/scripts/audio-control.sh vol-up
+	bindsym --locked $actionmod+Down exec $HOME/.config/custom-themes/neu-way-ui/scripts/audio-control.sh mute-toggle
+	bindsym --locked $actionmod+Up exec $HOME/.config/custom-themes/neu-way-ui/scripts/audio-control.sh mute-toggle
+	
+	bindsym --locked XF86AudioMute exec $HOME/.config/custom-themes/neu-way-ui/scripts/audio-control.sh mute-toggle
+	bindsym --locked XF86AudioRaiseVolume exec $HOME/.config/custom-themes/neu-way-ui/scripts/audio-control.sh vol-up
+	bindsym --locked XF86AudioLowerVolume exec $HOME/.config/custom-themes/neu-way-ui/scripts/audio-control.sh vol-down
+#
+# Moving around:
+#
+	# Move your focus around
+	bindsym $movemod+$left focus left
+	bindsym $movemod+$down focus down
+	bindsym $movemod+$up focus up
+	bindsym $movemod+$right focus right
+
+	#NOTE: alt+left and alt+right are used by firefox for prev and next page respectively
+	#so they shouldn't be bound here at all
+	# Or use $mod+[up|down|left|right]
+#	bindsym $movemod+Left focus left
+#	bindsym $movemod+Down focus down
+#	bindsym $movemod+Up focus up
+#	bindsym $movemod+Right focus right
+
+	# Move the focused window with the same, but add Shift
+	bindsym $movemod+Shift+$left move left
+	bindsym $movemod+Shift+$down move down
+	bindsym $movemod+Shift+$up move up
+	bindsym $movemod+Shift+$right move right
+	# Ditto, with arrow keys
+	bindsym $movemod+Shift+Left move left
+	bindsym $movemod+Shift+Down move down
+	bindsym $movemod+Shift+Up move up
+	bindsym $movemod+Shift+Right move right
+
+	bindsym $movemod+Tab focus next
+	bindsym $movemod+Shift+Tab focus prev
+#
+# Workspaces:
+#
+	# Switch to workspace
+	bindsym $movemod+0 workspace number 0
+	bindsym $movemod+1 workspace number 1
+	bindsym $movemod+2 workspace number 2
+	bindsym $movemod+3 workspace number 3
+	bindsym $movemod+4 workspace number 4
+	bindsym $movemod+5 workspace number 5
+	bindsym $movemod+6 workspace number 6
+	bindsym $movemod+7 workspace number 7
+	bindsym $movemod+8 workspace number 8
+	bindsym $movemod+9 workspace number 9
+	# Move focused container to workspace
+	bindsym $movemod+Shift+0 move container to workspace number 0
+	bindsym $movemod+Shift+1 move container to workspace number 1
+	bindsym $movemod+Shift+2 move container to workspace number 2
+	bindsym $movemod+Shift+3 move container to workspace number 3
+	bindsym $movemod+Shift+4 move container to workspace number 4
+	bindsym $movemod+Shift+5 move container to workspace number 5
+	bindsym $movemod+Shift+6 move container to workspace number 6
+	bindsym $movemod+Shift+7 move container to workspace number 7
+	bindsym $movemod+Shift+8 move container to workspace number 8
+	bindsym $movemod+Shift+9 move container to workspace number 9
+	# Note: workspaces can have any name you want, not just numbers.
+
+	bindsym $movemod+Escape workspace back_and_forth
+	bindsym $movemod+F1 exec $HOME/.config/custom-themes/neu-way-ui/scripts/sway-workspace.py prev focus
+	bindsym $movemod+F2 exec $HOME/.config/custom-themes/neu-way-ui/scripts/sway-workspace.py next focus
+	bindsym $movemod+F5 workspace prev
+	bindsym $movemod+F6 workspace next
+
+	bindsym $movemod+Shift+Escape move window to workspace back_and_forth
+	bindsym $movemod+Shift+F1 exec $HOME/.config/custom-themes/neu-way-ui/scripts/sway-workspace.py prev move
+	bindsym $movemod+Shift+F2 exec $HOME/.config/custom-themes/neu-way-ui/scripts/sway-workspace.py next move
+	bindsym $movemod+Shift+F5 move window to workspace prev
+	bindsym $movemod+Shift+F6 move window to workspace next
+
+#
+# Layout stuff:
+#
+	# You can "split" the current object of your focus with
+	# $mod+b or $mod+v, for horizontal and vertical splits
+	# respectively.
+	bindsym $movemod+b splith
+	bindsym $movemod+v splitv
+
+	# Switch the current container between different layout styles
+	bindsym $movemod+r layout toggle split
+	bindsym $movemod+t layout tabbed
+	bindsym $movemod+y layout stacking
+
+	# Make the current focus fullscreen
+	bindsym $movemod+f fullscreen
+
+	# Toggle the current focus between tiling and floating mode
+	bindsym $movemod+Shift+space floating toggle
+
+	# Swap focus between the tiling area and the floating area
+	bindsym $movemod+space focus mode_toggle
+
+	# Move focus to the parent container
+	bindsym $movemod+q focus parent
+	bindsym $movemod+e focus child
+
+	#no gaps; adjust this to a value higher than 0 if gaps are desired
+#	gaps inner 2
+	
+
+#
+# Titlebars
+#
+	#removes the title bar of each window
+	#NOTE: we DON'T want this because the waybar program is configured not to show titles
+	#so we need the titles to be *somewhere*
+#	default_border pixel 3
+
+#
+# Colors
+#
+# class			border			backgr.			text		indicator	child_border
+client.focused		$clr_focus_border	$clr_focus_bg		$clr_white	$clr_hglt	$clr_hglt
+client.focused_inactive	$clr_inactive_border	$clr_inactive_bg	$clr_white	#484e50		#5f676a
+client.unfocused	$clr_dk_gray		#222222			$clr_med_gray	#292d2e		#222222
+client.urgent		$clr_urgent_border	$clr_urgent_bg		$clr_white	$clr_urgent_bg	$clr_urgent_bg
+
+
+#
+# Lock screen binding
+#
+	#lock screen with swaylock; see ~/.swaylock/config for configuration
+	bindsym $actionmod+l exec swaylock
+	bindsym XF86ScreenSaver exec swaylock
+
+#
+# Scratchpad:
+#
+	# Sway has a "scratchpad", which is a bag of holding for windows.
+	# You can send windows there and get them back later.
+
+	# Move the currently focused window to the scratchpad
+#	bindsym $movemod+Shift+minus move scratchpad
+
+	# Show the next scratchpad window or hide the focused scratchpad window.
+	# If there are multiple scratchpad windows, this command cycles through them.
+#	bindsym $movemod+minus scratchpad show
+
+#
+# Resizing containers:
+#
+mode "resize" {
+	# left will shrink the containers width
+	# right will grow the containers width
+	# up will shrink the containers height
+	# down will grow the containers height
+	bindsym $left resize shrink width 10px
+	bindsym $down resize grow height 10px
+	bindsym $up resize shrink height 10px
+	bindsym $right resize grow width 10px
+
+	# Ditto, with arrow keys
+	bindsym Left resize shrink width 10px
+	bindsym Down resize grow height 10px
+	bindsym Up resize shrink height 10px
+	bindsym Right resize grow width 10px
+
+	# Return to default mode
+	bindsym Return mode "default"
+	bindsym Escape mode "default"
+	bindsym $movemod+Shift+r mode "default"
+}
+bindsym $movemod+Shift+r mode "resize"
+
+#
+# Status Bar:
+#
+# Read `man 5 sway-bar` for more information about this section.
+#bar {
+#	swaybar_command waybar
+#	
+#	position bottom
+#
+#	# When the status_command prints a new line to stdout, swaybar updates.
+#	# The default just shows the current date and time.
+#	status_command while date +'%Y-%m-%d %R:%S %a '; do sleep 1; done
+#
+#	colors {
+#		statusline $clr_white
+#		background #323232c0
+#		inactive_workspace #323232d0 #323232d0 #ececec
+#	}
+#}
+#bar {
+#	swaybar_command waybar
+#}
+
+
+include /etc/sway/config.d/*

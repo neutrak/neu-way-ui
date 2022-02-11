@@ -1,0 +1,620 @@
+;readline support
+(use-modules (ice-9 readline))
+(activate-readline)
+
+;constants
+(define pi 3.14159265358979323846) ;ratio of a circle's radius to its circumference such that 2*pi*r=C
+(define e 2.71828182845904523536) ;natural base such that (d/dx)(e^x)=e^x
+(define c 300000000) ;speed of light in meters per second
+
+;unit conversions
+
+;temperature
+(define f->c (lambda (f) (* (/ 5 9) (- f 32) 1.0) ))
+(define c->f (lambda (c) (+ (* (/ 9 5) c) 32.0)))
+
+;pressure
+(define pascal->psi (lambda (pa) (* pa 0.000145)))
+(define psi->pascal (lambda (psi) (* psi 6894.800)))
+
+;volume, mass, and density (density = mass / volume )
+(define liters->lbs-jet-a (lambda (liters) (/ (* liters 0.2642) 6.84)))
+(define liters->lbs-jet-a-1 (lambda (liters) (/ (* liters 0.2642) 6.71)))
+(define gallons->lbs-jet-a (lambda (gallons) (/ gallons 6.84)))
+(define gallons->lbs-jet-a-1 (lambda (gallons) (/ gallons 6.71)))
+(define liters->lbs-h2o (lambda (liters) (* liters 2.205)))
+
+;torque
+(define nm->lbft (lambda (nm) (/ nm 1.355818)))
+(define lbft->nm (lambda (ftlb) (* 1.355818 ftlb)))
+
+;distance
+(define m->ft (lambda (m) (* m 3.28084)))
+(define ft->m (lambda (ft) (* ft (/ 1 (m->ft 1)))))
+(define m->in (lambda (m) (* 12 (m->ft m))))
+(define in->m (lambda (in) (ft->m (/ in 12))))
+(define cm->in (lambda (cm) (m->in (/ cm 100.0))))
+(define in->cm (lambda (in) (* (in->m in) 100)))
+
+;speed
+(define kt->mps (lambda (kt) (* kt 0.51444)))
+(define mps->kt (lambda (mps) (/ mps (kt->mps 1))))
+
+
+;other generally useful functions
+
+;modulo operation
+(define (% n d)
+    (floor (* d (- (/ n d) (floor (/ n d))))))
+;(define % remainder) ;this only accepts integers
+
+;rounds the number x to within the given precision
+;e.g. (round-to 3.14159 0.01) -> 3.14, (round-to 3.14999 0.01) -> 3.15
+(define (round-to x precision)
+    (define recip-prec (/ 1 precision))
+    (/ (round (* x recip-prec)) recip-prec))
+
+;returns the idx element of list l; false (#f) if index is too large, negative indices are assumed to be 0
+(define (list-index l idx)
+    (if (null? l)
+        #f
+        (if (<= idx 0)
+            (car l)
+            (list-index (cdr l) (- idx 1)))))
+
+;returns true (#t) for a prime, false (#f) for a non-prime
+;should only be used on positive integers (>= 2)
+(define (is-prime? n)
+    (define (iter-is-prime a n)
+        ;if we hit the square root of n, then return true
+        (if (> (* a a) n)
+            #t
+            ;no remainder after division, therefore we found a factor (and the number isn't prime)
+            (if (= (/ n a) (floor (/ n a)))
+                ;return false
+                #f
+                ;try again
+                (iter-is-prime (+ a 1) n))))
+    (iter-is-prime 2 n))
+
+(define (largest-prime-factor n)
+	;count every number up to sqrt(n)
+	;if it's divisible by that it's not prime
+	(define (iter-is-prime a n)
+		(if (<= (* a a) n)
+			(if (= (/ n a) (floor (/ n a)))
+				(iter-is-prime 2 (/ n a))
+				(iter-is-prime (+ a 1) n))
+			n))
+	(iter-is-prime 2 n))
+
+;returns the concatenation of given 2 lists
+(define (list-cat start cont)
+    (if (null? cont)
+        start
+        (if (null? start)
+            cont
+            (if (null? (cdr start))
+                (cons (car start) cont)
+                (cons (car start) (list-cat (cdr start) cont))))))
+
+;returns the average of all the given numbers
+(define (avg . num-list)
+    (define (iter-avg num-list total count)
+        (if (null? num-list)
+            #f
+            (if (null? (cdr num-list))
+                (/ (+ (car num-list) total) (+ count 1))
+                (iter-avg (cdr num-list) (+ total (car num-list)) (+ count 1)))))
+    (iter-avg num-list 0 0))
+
+;factorial
+(define (! n)
+    (define (iter-fact n acc)
+        (if (< n 2)
+            acc
+            (iter-fact (- n 1) (* acc n))))
+    (iter-fact n 1))
+
+;binomial coefficient
+(define (choose n k)
+    (/ (! n) (* (! k) (! (- n k)))))
+
+;choose with repeats
+(define (choose-rep n k)
+    (choose (+ n k -1) k))
+
+;returns the probability that in a group of n people 2 people do NOT share a birthday
+(define (bday-prob n)
+    (if (> n 1)
+        (* (bday-prob (- n 1)) (expt (/ 364.0 365.0) (- n 1)))
+        1))
+
+;returns a binary string representation of the given integer n
+(define (binstring n)
+    (if (= n 0)
+        "0"
+        ;if this number is divisible by 2
+        (if (= (% n 2) 0)
+            ;prepend a 0
+            (string-concatenate (list (binstring (/ n 2)) "0"))
+            ;else prepend a 1
+            (string-concatenate (list (binstring (/ (- n 1) 2)) "1")))))
+
+;returns the integer n left-bit-shifted by the given number of bits
+(define (<< n bits regsize)
+    (if (> bits 0)
+        (<< (* n 2) (- bits 1) regsize)
+        (% n (expt 2 regsize))))
+
+;returns the integer n right-bit-shifted by the given number of bits
+(define (>> n bits regsize)
+    (if (> bits 0)
+        (>> (/ n 2) (- bits 1) regsize)
+        (% n (expt 2 regsize))))
+
+;bitwise and operator
+(define (& regsize num-list)
+    (define (lsb-and a b)
+        (if (and (= (% a 2) 1) (= (% b 2) 1))
+            1
+            0))
+    (define (a-b-and a b)
+        (if (and (> a 0) (> b 0))
+            (+ (<< (a-b-and (>> a 1 regsize) (>> b 1 regsize)) 1 regsize) (lsb-and a b))
+            0))
+    
+    (if (null? num-list)
+        0
+        (if (null? (cdr num-list))
+            (car num-list)
+            (a-b-and (car num-list) (& regsize (cdr num-list))))))
+
+;bitwise or operator
+(define (| regsize num-list)
+    (define (lsb-or a b)
+        (if (or (= (% a 2) 1) (= (% b 2) 1))
+            1
+            0))
+    (define (a-b-or a b)
+        (if (or (> a 0) (> b 0))
+            (+ (<< (a-b-or (>> a 1 regsize) (>> b 1 regsize)) 1 regsize) (lsb-or a b))
+            0))
+    
+    (if (null? num-list)
+        0
+        (if (null? (cdr num-list))
+            (car num-list)
+            (a-b-or (car num-list) (| regsize (cdr num-list))))))
+
+;bitwise xor operator
+(define (^ regsize num-list)
+    (define (lsb-xor a b)
+        (if (and (or (= (% a 2) 1) (= (% b 2) 1)) (not (and (= (% a 2) 1) (= (% b 2) 1))))
+            1
+            0))
+    (define (a-b-xor a b)
+        (if (or (> a 0) (> b 0))
+            (+ (<< (a-b-xor (>> a 1 regsize) (>> b 1 regsize)) 1 regsize) (lsb-xor a b))
+            0))
+    
+    (if (null? num-list)
+        0
+        (if (null? (cdr num-list))
+            (car num-list)
+            (a-b-xor (car num-list) (& regsize (cdr num-list))))))
+
+
+;returns a hexadecimal string representation of the given integer n
+(define (hexstring n regsize)
+    (define (inner-hexstring n regsize)
+        (define (ls-hexchar n)
+            (define mod (% n 16))
+            (if (< mod 10)
+                (number->string mod)
+                (string (integer->char (+ 97 (- mod 10))))))
+        (if (< n 1)
+            "0"
+            (string-concatenate (list (inner-hexstring (>> n 4 regsize) regsize) (ls-hexchar n)))))
+    
+    (define (hexpad str regsize)
+        (if (< (string-length str) (ceiling (/ regsize 4)))
+            (hexpad (string-concatenate (list "0" str)) regsize)
+            str))
+    
+    (string-concatenate (list "0x" (hexpad (inner-hexstring n regsize) regsize))))
+
+;returns a decimal number equivalent to the given hexidecimal string
+;(define (hex->dec hexstr)
+;    ;TODO: WRITE THIS!
+;    (define (hexdigit->dec hexdigit)
+;        )
+;    (if (< (string-length hexstr) 1)
+;        0
+;        (begin
+;            ;TODO: determine current-digit
+;            (+ (* 2 (hex->dec (substring hexstr 0 (- 2 (string-length hexstr 1))))) (hexdigit->dec (string-index hexstr (- (string-length hexstr) 1)))))))
+
+;ratio is just a division
+(define (ratio a b)
+    (/ a b))
+
+;a growth function
+;useful for things like modelling population growth over time
+(define (growth base rate iterations)
+    (if (> iterations 0)
+        (growth (+ base (* base rate)) rate (- iterations 1))
+        base))
+
+;a limited growth function
+;useful for things like modelling population growth over time, with a finitely increasing number of resources
+(define (limited-growth base rate iterations limit-per-iteration)
+    (if (> iterations 0)
+        (if (< (* base rate) limit-per-iteration)
+            (limited-growth (+ base (* base rate)) rate (- iterations 1) limit-per-iteration)
+            (limited-growth (+ base limit-per-iteration) rate (- iterations 1) limit-per-iteration))
+        base))
+
+;a reserved growth function
+;useful for this like modelling population growth over time,
+;with a percent of the growth being reserved (for emmigration or whatever)
+(define (reserved-growth base rate iterations reserve-rate)
+    (if (> iterations 0)
+        (reserved-growth (+ base (* base rate (- 1 reserve-rate))) rate (- iterations 1) reserve-rate)
+        base))
+
+;a growth function that iterates until a given amount is achieved per iteration
+;returns a list consisting of how many iterations,
+;the base at the limit-inducing iteration,
+;and the growth per iteration at the limit
+(define (growth-until base rate iter-limit)
+    (define (iter-growth-until base rate iter-limit iter-cnt)
+        (if (>= (* base rate) iter-limit)
+            (list iter-cnt base (* base rate))
+            (iter-growth-until (+ base (* base rate)) rate iter-limit (+ iter-cnt 1))))
+    (iter-growth-until base rate iter-limit 0))
+
+;converts degrees to a "semicircle" type 32 bits in size
+(define (deg-to-sc_type degrees)
+    (/ (* degrees (expt 2 32)) 360))
+
+;an iterative method of finding the zero of any function which crosses the x axis
+;this is based on newton's root-finding algorithm
+;f is the function to find the root of, f-prime is the derivative of that function with respect to x
+(define (newton-root f f-prime guess tolerance)
+    (define (iter-newton-root x tolerance)
+        (if (< (abs (f x)) tolerance)
+            x
+            (begin
+                (display x)
+                (newline)
+                ;find the slope and intercept of a tangent line by using the first derivative
+                (let ((slope (f-prime x)) (y (f x)))
+                    (let ((intercept (- y (* slope x))))
+                        ;use the x coordinate of the intercept as the new guess
+                        ; 0 = slope*x + intercept
+                        ; (- intercept) / slope = x
+                        (iter-newton-root (/ (- intercept) slope) tolerance))))))
+    (iter-newton-root guess tolerance))
+
+;an interative method of finding the nth root of k (if n==2 this is square root, if n==3 this is cube root, etc.)
+;this is based on newton's root finding method applied to the function y=k-x^n
+(define (newton-nrt k n)
+    ;integer fast exponentiation used only to prove a point
+    ;which is that this can be done without having a pre-existing exponentiation function
+    ;expt already handles nth roots as (expt k (/ 1 n)), so I'm avoiding use of that function
+    (define (int-pow base exponent)
+        ;anything to the 0th power is 1 by definition
+        (if (= exponent 0)
+            1
+            ;logarithmic time by finding partial results
+            ;done by knowing that base^exp = base^(exp/2) * base^(exp/2) and modifying that to apply to odd exponents
+            (if (= (modulo exponent 2) 0)
+                (let ((result (int-pow base (/ exponent 2))))
+                    (* result result))
+                (let ((result (int-pow base (/ (- exponent 1) 2))))
+                    (* result result base)))))
+    (if (integer? n)
+        (let ((n (inexact->exact n)))
+            (newton-root (lambda (x) (- k (int-pow x n))) (lambda (x) (* (- n) (int-pow x (- n 1)))) k 0.000000000001))
+        (nan)))
+
+;an iterative method of finding a square root
+;this is based on newton's root finding method applied to the function y=k-x^2
+(define (newton-sqrt k)
+    (newton-root (lambda (x) (- k (* x x))) (lambda (x) (* -2 x)) k 0.0000000000001))
+
+
+;a method of approximating sine or cosine using a taylor series
+;the argument sin-not-cos defines whether we are computing a sine or a cosine
+(define (taylor-trig theta sin-not-cos taylor-terms)
+    (define (iter-taylor-trig theta terms deriv-idx acc)
+;        (display acc)
+;        (newline)
+        ;if we have no more terms to account for, return the accumulator
+        (if (<= terms 0)
+            acc
+            ;otherwise, calculate the coefficient for this term as the nth derivative of sin(x) at 0
+            (let ((coeff (let ((rem (remainder deriv-idx 4)))
+                    (if sin-not-cos
+                        (if (= rem 3)
+                            -1
+                            (if (= rem 1)
+                                1
+                                0))
+                        (if (= rem 0)
+                            1
+                            (if (= rem 2)
+                                -1
+                                0))))))
+                ;calculate the term as the talyor series term for n=deriv-idx, x=theta, a=0, using calculated f(n)(0)
+                (let ((term (* (/ coeff (! deriv-idx)) (expt (- theta 0) deriv-idx))))
+                    ;add the term to the accumlator, update bookkeeping, and continue
+                    (iter-taylor-trig theta (- terms 1) (+ deriv-idx 1) (+ term acc))))))
+    
+    ;how many terms of the taylor series to use in total
+;    (define taylor-terms 30)
+    
+    ;normalize range to [-pi,pi] since that is where our approximation works best
+    (if (> theta pi)
+        (taylor-trig (- theta (* 2 pi)) sin-not-cos taylor-terms)
+        (if (< theta (- pi))
+            (taylor-trig (+ theta (* pi 2)) sin-not-cos taylor-terms)
+            (iter-taylor-trig theta taylor-terms 0 0))))
+    
+    ;because the above if assumes a prior knowledge of pi
+    ;if you're using this trig function to calculate pi and don't want to assume prior knowledge
+    ;then comment out the above if and uncomment this line, to calculate pi without assuming its value first
+;    (iter-taylor-trig theta taylor-terms 0 0))
+
+
+;a method of approximating sine using a taylor series
+(define (taylor-sin theta)
+    (taylor-trig theta #t 30))
+;    (taylor-trig theta #t 300))
+
+;cosine is a phase shift of sin by pi/2
+;but to keep precision and to avoid assuming we know the value of pi, it uses a separate taylor series
+(define (taylor-cos theta)
+    (taylor-trig theta #f 30))
+;    (taylor-trig theta #f 300))
+
+;tangent is sine over cosine
+(define (taylor-tan theta)
+    (/ (taylor-sin theta) (taylor-cos theta)))
+
+;secant is 1/cos
+(define (taylor-sec theta)
+    (/ 1 (taylor-cos theta)))
+
+;cosecant is 1/sin
+(define (taylor-csc theta)
+    (/ 1 (taylor-sin theta)))
+
+;cotangent is 1/tan
+(define (taylor-cot theta)
+    (/ 1 (taylor-tan theta)))
+
+;arc sine finds the number x such that sin(x) ~= k, -1<=k<=1, -pi/2<=x<=pi/2
+;this is based on newton's method of finding real roots of functions, using a restricted domain
+(define (taylor-asin k)
+    (if (or (> k 1) (< k -1))
+        (begin
+            (display "Invalid constant value given to arc-sine; range of sine is [-1,1]")
+            (newline))
+        (newton-root (lambda (x) (- k (taylor-sin x))) (lambda (x) (* -1 (taylor-cos x))) 0 0.0000000000001)))
+
+;arc cosine finds the number x such that cos(x) ~= k, -1<=k<=1, 0<=x<=pi
+;this is based on newton's method of finding real roots of functions, using a restricted domain
+(define (taylor-acos k)
+    (if (or (> k 1) (< k -1))
+        (begin
+            (display "Invalid constant value given to arc-cosine; range of cosine is [-1,1]")
+            (newline))
+        (newton-root (lambda (x) (- k (taylor-cos x))) (lambda (x) (taylor-sin x)) 3/2 0.0000000000001)))
+
+;^ note that the above acos function can give an approximation of pi by taking (taylor-acos -1)
+
+;a lookup table for the taylor sine function
+;(define taylor-lookup-sine-table
+;    (list->vector (let loop ((x -1000) (acc '()))
+;        (if (> x 1000)
+;            acc
+;            (loop (+ x 1) (cons (taylor-sin (/ (* x pi) 1000)) acc))))))
+
+;a function to get the lookup table entry for the taylor sine function
+;(define (lookup-taylor-sin x)
+;    (vector-ref taylor-lookup-sine-table (inexact->exact (round (/ (* 1000 x) pi)))))
+
+;decimal precision test for guile bignums
+(define (dec-prec-test start)
+    (define next-value (/ start 10))
+    (display start)
+    (newline)
+    
+    ;if dividing by 10 had an effect then we are not yet on the smallest digit we can represent
+    (if (not (= start next-value))
+        (dec-prec-test next-value)))
+
+;the arc-cosine of 0 is pi/2
+;therefore pi can be calculated as 2*acos(0)
+;this calculates pi using a taylor series for trig functions
+;and newton's root finding method to invert them
+(define (calc-pi)
+    (* 2.0 (taylor-acos 0.0)))
+
+(define (fixed-point-cos start)
+    (define next-value (taylor-cos start))
+    (display start)
+    (newline)
+    (if (> (abs (- start next-value)) 0.00001)
+        (fixed-point-cos next-value)
+        next-value))
+
+;average adjustment
+;given existing C entries at average value r,
+;return adjusted average including a single new value a
+(define (avg-adj c r a)
+    (/ (+ (* c r) a) (+ c 1)))
+
+;repeated average adjustment
+;repeat avg-adj k times
+;(k new entries each with value a)
+(define (rep-adj k c r a)
+    (if (> k 0)
+        (begin (display r)
+            (newline)
+            (rep-adj (- k 1) (+ c 1) (avg-adj c r a) a))
+        r))
+
+;O() calculations for asymptotic runtime
+(define (O_nlogn n)
+    (* n (/ (log n) (log 2))))
+
+(define (O_n n)
+    n)
+
+(define (O_nn n)
+    (* n n))
+
+(define (O_logn n)
+    (/ (log n) (log 2)))
+
+(define (O_e^n n)
+    (expt e n))
+
+;find the "distance" between two strings
+;this is the number of operations (insert, delete, or substitute)
+;to transform a into b or vice versa
+;this is a very inefficient formulation since it doesn't memoize recursive results
+(define (str-diff-cnt a b)
+    (begin
+;        (display (string-concatenate (list "a=" a ", b=" b)))
+;        (newline)
+        (cond
+            ;we've run out of characters to check so return that
+            ((< (string-length a) 1)
+                (string-length b))
+            ((< (string-length b) 1)
+                (string-length a))
+            (#t
+                (if (char=? (string-ref a 0) (string-ref b 0))
+                    ;no differences this character, so check next character
+                    (str-diff-cnt (substring a 1 (string-length a)) (substring b 1 (string-length b)))
+                    
+                    ;there is at minimum one difference between the two strings
+                    ;so if we find a branch with only one difference we can stop looking
+                    (let ((sub-diff-cnt (+ 1 (str-diff-cnt (substring a 1 (string-length a)) (substring b 1 (string-length b))))))
+                        (if (= sub-diff-cnt 1)
+                            sub-diff-cnt
+                            (let ((ins-diff-cnt (+ 1 (str-diff-cnt a (substring b 1 (string-length b))))))
+                                (if (= ins-diff-cnt 1)
+                                    ins-diff-cnt
+                                    (let ((del-diff-cnt (+ 1 (str-diff-cnt (substring a 1 (string-length a)) b))))
+                                        (let ((min-diff-cnt (min ins-diff-cnt del-diff-cnt sub-diff-cnt)))
+                                            min-diff-cnt)))))))))))
+
+;this is an implementation of baye's theorem
+;as it applies to tests with a given accuracy in a population with a given occurance
+;for example, for a 99% accurate test for a disease which has an occurance of 1 person in every 1000 on average
+;this will determine the likelihood that if someone tested positive they have the disease (in this example about 9%)
+;arguments are in PROBABILITIES, NOT PERCENT
+(define (bayes accuracy occurance)
+    ;note this assumes that errors (i.e. inaccurate results) are false positives
+    ;if they are instead false negatives this equation changes somewhat
+    (/ occurance (+ (- 1 accuracy) occurance)))
+
+
+;this will run a simulation based on given probability
+;and return the number of iterations before the event happens
+(define (prob-sim probability)
+    ;although this can be written truly recursively
+    ;it's iterative (tail-recursive) here to prevent stack overflow
+    (define (iter-prob-sim probability acc)
+        ;if the event happened then we're done
+        (if (< (random 1.0) probability)
+            acc
+            ;else run another trial
+            (iter-prob-sim probability (+ acc 1))))
+    (iter-prob-sim probability 1))
+
+;integer fast exponentiation
+;please use expt for actual code,
+;this is just for demonstration and teaching purposes
+;NOTE: exponent must be a non-negative integer
+(define (int-pow base exponent)
+    ;anything to the 0th power is 1 by definition
+    (if (= exponent 0)
+        1
+        ;logarithmic time by finding partial results
+        ;done by knowing that base^exp = base^(exp/2) * base^(exp/2) and modifying that to apply to odd exponents
+        (if (= (modulo exponent 2) 0)
+            (let ((result (int-pow base (/ exponent 2))))
+                (* result result))
+            (let ((result (int-pow base (/ (- exponent 1) 2))))
+                (* result result base)))))
+
+;sum all given arguments
+(define (sum . l)
+    (if (null? l)
+        0
+        (if (null? (cdr l))
+            (car l)
+            (+ (car l) (apply sum (cdr l))))))
+
+;find the weight (in newtons and lbs)
+;of a given mass (in kilograms)
+;with a given gravitational acceleration (in meters/second/second)
+(define (find-weight mass acceleration)
+    (let ((F (* mass acceleration)))
+        (display F)
+        (display " Newtons")
+        (newline)
+        (display (* F 0.22481))
+        (display " Pounds")
+        (newline)))
+
+;find the weight on the given celestial body
+;using earth weight (in lbs) as a starting point
+(define (weight-on location earth-weight)
+    (let ((mass-kg (/ (/ earth-weight 0.22481) 9.81)))
+        (cond
+            ((string= location "Earth")
+                (find-weight mass-kg 9.81))
+            ((string= location "Mars")
+                (find-weight mass-kg 3.71))
+            ((string= location "Venus")
+                (find-weight mass-kg 8.87))
+            ((string= location "Jupiter")
+                (find-weight mass-kg 24.79))
+            ((string= location "Saturn")
+                (find-weight mass-kg 10.44))
+            ((string= location "Enceladus")
+                (find-weight mass-kg 0.113))
+        )))
+
+;runs a "decimation" of a population until a given cutoff percentage is reached
+;because each decimation is a bit smaller each iteration this isn't a simple multiplication
+(define (decimate-until start-perc cutoff-perc count)
+    (if (<= start-perc cutoff-perc)
+        count
+        (begin
+;            (display start-perc)
+;            (newline)
+            (decimate-until (* 0.9 start-perc) cutoff-perc (+ count 1)))))
+
+;calculates the position of the fret relative to the nut
+;for a chordophone with a particular scale length
+;result is in whatever units scale-length was given in
+(define (calc-fret-pos scale-length fret-number)
+	;NOTE: western musical notation allows for 12 total notes (half-steps) and we're assuming equal temperment
+	;Regarding the derivation for this:
+	;	It's important to know/understand that just because one octave is 12 half-steps above and double the frequency of another octave does NOT mean that frequency increase is linear
+	;	Rather frequency for a given note n half-steps away from the reference (e.g. 440Hz A4) is given by the formula:
+	;		f(n) = f[0] * ((2^(1/12))^n)
+	;		Where f[0] = reference frequency; n is positive for higher notes and negative for lower notes
+	;	This in combination with the reference point for the 12th fret (1/2 of the scale length) yields:
+	;		fret-pos(n) = scale-length - (scale-length/(2^(fret-number/12)))
+	;		which no longer depends on the reference frequency f[0]
+	(- scale-length (/ scale-length (expt 2 (/ fret-number 12)))))
+

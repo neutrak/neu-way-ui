@@ -115,7 +115,7 @@ exec 'sleep 5; blueman-applet'
 
 #monitor cpu temperature using a hardware-independent average
 #so we don't need to configure the hwmon setting for each individual core on each individual machine this config is used for
-exec watch -n 2 'echo "$("$HOME"/.config/custom-themes/neu-way-ui/scripts/cpu-temp-avg.sh)*1000" | bc > /tmp/cpu-temp-avg'
+exec_always 'while [ 1 ] ; do echo "$("$HOME"/.config/custom-themes/neu-way-ui/scripts/cpu-temp-avg.sh)*1000" | bc > /tmp/cpu-temp-avg ; sleep 2 ; done'
 
 #auto-retreive calendar notifications and show notifications for future events using notify-send when appropriate
 #NOTE: this depends on the 'at' utility being installed

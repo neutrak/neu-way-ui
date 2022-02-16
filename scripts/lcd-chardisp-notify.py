@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 
 #this script polls mako notifications using the "makoctl list" utility
-#and outputs a summar to a 16x2 character LCD display
+#and outputs a summary to a 16x2 character LCD display
 
 import argparse
 import json

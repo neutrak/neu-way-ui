@@ -180,7 +180,12 @@ focus_follows_mouse no
 	# clear clipboard
 	# NOTE: this should work even when the screen is locked!
 	bindsym --locked $actionmod+Backspace exec $HOME/.config/custom-themes/neu-way-ui/scripts/clear-clipboard.sh
-
+	
+	# clear mako notifications from the desktop
+	# NOTE: this should work even when the screen is locked!
+	# NOTE: a log of dismissed notification is kept in /tmp/mako-dismissed-notifications.log until next shutdown
+	bindsym --locked $actionmod+Delete exec $HOME/.config/custom-themes/neu-way-ui/scripts/mako-dismiss.sh
+	
 	# Drag floating windows by holding down $mod and left mouse button.
 	# Resize them with right mouse button + $mod.
 	# Despite the name, also works for non-floating windows.

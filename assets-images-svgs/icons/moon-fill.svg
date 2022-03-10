@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   width="333.00934"
+   height="347.04227"
+   viewBox="0 0 88.108719 91.821602"
+   version="1.1"
+   id="svg1774"
+   inkscape:version="0.92.5 (2060ec1f9f, 2020-04-08)"
+   sodipodi:docname="moon.svg">
+  <defs
+     id="defs1768" />
+  <sodipodi:namedview
+     id="base"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageopacity="0.0"
+     inkscape:pageshadow="2"
+     inkscape:zoom="0.35"
+     inkscape:cx="166.50465"
+     inkscape:cy="173.52114"
+     inkscape:document-units="px"
+     inkscape:current-layer="layer1"
+     showgrid="false"
+     units="px"
+     inkscape:showpageshadow="false"
+     showborder="false"
+     inkscape:window-width="956"
+     inkscape:window-height="983"
+     inkscape:window-x="962"
+     inkscape:window-y="63"
+     inkscape:window-maximized="1" />
+  <metadata
+     id="metadata1771">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title></dc:title>
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <g
+     inkscape:label="Layer 1"
+     inkscape:groupmode="layer"
+     id="layer1"
+     transform="translate(98.860904,-102.92252)">
+    <g
+       transform="translate(-176.43321,16.173351)"
+       style="opacity:1"
+       id="g1123">
+      <path
+         inkscape:connector-curvature="0"
+         id="path1099"
+         d="m 78.678003,155.2527 a 46.620616,46.620616 0 0 0 63.684947,17.06432 46.620616,46.620616 0 0 0 17.06432,-63.68495 46.620616,46.620616 0 0 0 -29.13727,-21.882897 46.620616,46.620616 0 0 1 -18.17002,61.527537 46.620616,46.620616 0 0 1 -34.547674,4.81859 46.620616,46.620616 0 0 0 1.105697,2.1574 z"
+         style="opacity:1;fill:#7f8e92;fill-opacity:1;stroke:#ffffff;stroke-width:0;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" />
+    </g>
+  </g>
+</svg>

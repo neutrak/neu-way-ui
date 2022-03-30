@@ -159,6 +159,9 @@ focus_follows_mouse no
 	# Start a web browser
 	bindsym $actionmod+w exec $browser
 	
+	# with shift make it easy to select different profiles for said browser
+	bindsym $actionmod+Shift+w exec $HOME/.config/custom-themes/neu-way-ui/scripts/ff-profile-select.sh
+	
 	# Start a gui text editor
 	bindsym $actionmod+e exec $guieditor
 	

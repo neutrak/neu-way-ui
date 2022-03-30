@@ -41,6 +41,12 @@ then
 	alias tmpv="mpv -quiet -fs --vo=gpu --wid=`xwininfo -id $WINDOWID -tree | tail -n 2 | grep -oP '0x[0-9a-f]+ '`"
 fi
 
+#iff this is wayland, use wayland for mpv video output
+if [ $is_wayland == "true" ]
+then
+	alias mpv="mpv -vo=wlshm"
+fi
+
 #short scripts
 alias bios='[ -f /usr/sbin/dmidecode ] && sudo -v && echo -n "Motherboard" && sudo /usr/sbin/dmidecode -t 1 | grep "Manufacturer\|Product Name\|Serial Number" | tr -d "\t" | sed "s/Manufacturer//" && echo -ne "\nBIOS" && sudo /usr/sbin/dmidecode -t 0 | grep "Vendor\|Version\|Release" | tr -d "\t" | sed "s/Vendor//"'
 alias spellcheck='echo y | ~/.config/custom-themes/neu-way-ui/scripts/line_diff.py --color --line ""'

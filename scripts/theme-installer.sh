@@ -300,6 +300,9 @@ install_neu_way_ui_theme () {
 	then
 		echo 'Arch Linux detected; installing packages using pacman'
 		
+		#NOTE: /tmp is mounted as a tmpfs filesystem and not on the root partition by default in arch
+		#so no action is needed to ensure that
+		
 		#start by updating what we already have and ensuring we have a fresh and stable base
 		pause
 		sudo pacman -Syu
@@ -336,6 +339,14 @@ install_neu_way_ui_theme () {
 	elif [ "$distro" == 'ubuntu' ]
 	then
 		echo 'Ubuntu Linux detected; installing packages using apt-get'
+		
+		#make sure /tmp is mounted as a tmpfs filesystem and not on the root partition
+		#because for some reason this isn't default in ubuntu
+		if [ ! -e "/etc/systemd/system/tmp.mount" ]
+		then
+			sudo ln -s /usr/share/systemd/tmp.mount /etc/systemd/system/tmp.mount
+		fi
+		sudo systemctl enable tmp.mount
 		
 		#start by updating what we already have and ensuring we have a fresh and stable base
 		pause

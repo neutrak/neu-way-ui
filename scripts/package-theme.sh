@@ -13,7 +13,7 @@ fi
 installer_dir="$(pwd)"
 
 cd ..
-tar --exclude='neu-way-ui/private-config' --exclude='neu-way-ui/private-config.tar.gz.cpt' --exclude='neu-way-ui/.git' --exclude='neu-way-ui/.gitignore' --exclude='.*.swp' -cvzf neu-way-ui.tar.gz neu-way-ui
+tar --exclude='neu-way-ui/private-config' --exclude='neu-way-ui/private-config.tar.gz.cpt' --exclude='neu-way-ui/.git' --exclude='neu-way-ui/.gitignore' --exclude='neu-way-ui/.git_obsolete' --exclude='.*.swp' -cvzf neu-way-ui.tar.gz neu-way-ui
 cd -
 
 echo "Theme packaged at ../neu-way-ui.tar.gz"

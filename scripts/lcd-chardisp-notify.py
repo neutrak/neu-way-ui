@@ -83,7 +83,14 @@ def serial_notify_poll_loop(ttydev:str='/dev/ttyACM0',chk_interval=5,disp_cols=1
 				for line in output_lines:
 					output_str+=line
 				
-				output_p=subprocess.run(['minicom','-o','-D',ttydev],input=output_str.encode('utf-8'),bufsize=0)
+				#if your output device supports unicode then use this
+#				output_binstr=output_str.encode('utf-8')
+				
+				#my output device does /not/ support unicode :/
+				#non-ascii characters will be rendered as question marks
+				output_binstr=output_str.encode('ascii',errors='replace')
+				
+				output_p=subprocess.run(['minicom','-o','-D',ttydev],input=output_binstr,bufsize=0)
 			
 				time.sleep((scroll_rate_ms/1000.0))
 				scroll_pos+=1

@@ -478,7 +478,7 @@ colors:
 # Window opacity as a floating point number from `0.0` to `1.0`.
 # The value `0.0` is completely transparent and `1.0` is opaque.
 #deprecated in favor of window.opacity (in window section)
-background_opacity: 0.96
+# background_opacity: 0.96
 
 #selection:
   # This string contains all characters that are used as separators for

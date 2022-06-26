@@ -317,7 +317,7 @@ install_neu_way_ui_theme () {
 		
 		#install userspace packages
 		pause
-		sudo pacman -S pass sway swayidle swaylock waybar otf-font-awesome xorg-xwayland alacritty firefox pavucontrol gnome-calendar gnome-online-accounts rofi thunderbird wl-clipboard khal vdirsyncer mako grim blueman oath-toolkit keepassxc remind at neovim python-pynvim pulseaudio-equalizer pavucontrol man-db man-pages texinfo vim cryptsetup minicom pcmanfm ncdu htop inkscape curl mpv mousepad ripgrep
+		sudo pacman -S pass sway swayidle swaylock waybar otf-font-awesome xorg-xwayland alacritty firefox pavucontrol gnome-calendar gnome-online-accounts rofi thunderbird wl-clipboard khal vdirsyncer mako grim blueman oath-toolkit keepassxc remind at neovim python-pynvim pulseaudio-equalizer pavucontrol man-db man-pages texinfo vim cryptsetup minicom pcmanfm ncdu htop inkscape curl mpv mousepad ripgrep bc netctl dialog
 
 		#install (and if necessary build) anything not available through repos
 		

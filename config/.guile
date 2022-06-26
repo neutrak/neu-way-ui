@@ -45,7 +45,9 @@
 
 ;modulo operation
 (define (% n d)
-	(floor (* d (- (/ n d) (floor (/ n d))))))
+	;NOTE: a previous version of this function was written with floor in place of round
+	;but failed on the case (% 102 7.0), which should be 4
+	(round (* d (- (/ n d) (floor (/ n d))))))
 ;(define % remainder) ;this only accepts integers
 
 ;rounds the number x to within the given precision

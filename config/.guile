@@ -23,6 +23,8 @@
 (define gallons->lbs-jet-a (lambda (gallons) (/ gallons 6.84)))
 (define gallons->lbs-jet-a-1 (lambda (gallons) (/ gallons 6.71)))
 (define liters->lbs-h2o (lambda (liters) (* liters 2.205)))
+(define liters->gallons (lambda (liters) (* liters 0.2642)))
+(define gallons->liters (lambda (gallons) (* gallons 3.785)))
 
 ;torque
 (define nm->lbft (lambda (nm) (/ nm 1.355818)))

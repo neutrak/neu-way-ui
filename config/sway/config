@@ -29,7 +29,8 @@ set $browser firefox # x11 firefox (through xwayland)
 # on the original workspace that the command was run on.
 # set $menu dmenu_path | dmenu -l 5 | xargs swaymsg exec --
 # set $menu wofi --show=run --prompt="" --cache-file='/dev/null' --fork
-set $menu rofi -show run -disable-history -lines 8
+# set $menu rofi -show run -disable-history -lines 8
+set $menu rofi -show run -theme ~/.config/custom-themes/neu-way-ui/config/rofi/neu-rofi.rasi -disable-history -lines 8
 
 # Your preferred GUI text editor
 #set $guieditor leafpad

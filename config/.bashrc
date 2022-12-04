@@ -1,7 +1,7 @@
 #~/.bashrc ; bash startup file
 
 #if bash is not running interactively, don't do anything
-if [ "$(echo "$-" | fgrep -o 'i')" == '' ]
+if [ "$(echo "$-" | grep -F -o 'i')" == '' ]
 then
 	return
 fi
@@ -62,10 +62,10 @@ fi
 #NOTE: for ubuntu lightdm is expected, as is present on xubuntu
 #other display managers require manual configuration
 distro=''
-if [ -n "$(uname -a | fgrep -o 'arch')" ]
+if [ -n "$(uname -a | grep -F -o 'arch')" ]
 then
 	distro='arch'
-elif [ -n "$(uname -a | fgrep -o 'Ubuntu')" ]
+elif [ -n "$(uname -a | grep -F -o 'Ubuntu')" ]
 then
 	distro='ubuntu'
 fi
@@ -77,6 +77,21 @@ then
 	#other ttys such as tty2 do not have this behaviour and can be used for debugging
 	if [ -z $DISPLAY ] && [ "$(tty)" = '/dev/tty1' ]
 	then
+		display_adapter_name="$(lspci -k | egrep --color=never '(VGA|3D|Display)' | head -n 1 | egrep --color=never -o '(Atom|VMware)')"
+
+#		echo "display_adapter_name="'"'"${display_adapter_name}"'"'"" #debug
+
+		#Intel Atom GPUs do not support hardware-accelerated mouse rendering
+		#so use software rendering on that architecture
+		if \
+			[ "${display_adapter_name}" == 'Atom' ] || \
+			[ "${display_adapter_name}" == 'VMware' ]
+		then
+			echo "running sway with software cursor..." #debug
+			export WLR_NO_HARDWARE_CURSORS=1
+		else
+			echo "running sway with hardware cursor..." #debug
+		fi
 		exec sway
 	fi
 elif [ "${distro}" == 'ubuntu' ]

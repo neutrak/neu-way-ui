@@ -6,10 +6,10 @@
 //    "margin-bottom": 2, //margin in pixels
     
     // Choose the order of the modules
-    "modules-left": ["custom/spacer", "network"],
+    "modules-left": ["network"],
     "modules-center": [],
 //    "modules-center": ["sway/window"],
-    "modules-right": ["cpu", "temperature", "custom/load-avg", "memory", "disk#rootfs", "disk#homefs", "custom/spacer"],
+    "modules-right": ["cpu", "temperature", "custom/load-avg", "memory", "disk#rootfs", "disk#homefs"],
 
     // Modules configuration
     "sway/workspaces": {

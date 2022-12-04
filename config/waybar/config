@@ -11,7 +11,7 @@
 //    "modules-center": ["sway/window"],
     "modules-center": [],
 //    "modules-right": ["tray", "network", "pulseaudio", "battery", "cpu", "temperature", "memory", "disk#rootfs", "disk#homefs", "clock", "idle_inhibitor"],
-    "modules-right": ["tray", "battery", "pulseaudio", "clock", "idle_inhibitor", "custom/spacer"],
+    "modules-right": ["tray", "battery", "pulseaudio", "clock", "idle_inhibitor"],
 
     // Modules configuration
     "sway/workspaces": {

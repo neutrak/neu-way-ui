@@ -113,13 +113,14 @@ def ping_notify(line,last_ping_time=0):
 #args:
 #	ping_file_url: the url of the file to check for new pings
 #	chk_interval: the polling interval (time between checks); units are seconds; default 5 seconds
+#	ssl_cert_check: whether to validate ssl certs or not (default true)
 #return:
 #	None (loops forever unless SIGKILL or SIGINT is received or a fatal error occurs)
 #side-effects:
 #	periodically reads the file at ping_file_url
 #		if a new ping is found, uses notify-send to send notification
 #		if a new ping is found, plays a sound based on the type of ping
-def ping_poll_loop(ping_file_url,chk_interval=5):
+def ping_poll_loop(ping_file_url,chk_interval=5,ssl_cert_check=True):
 	last_ping_time=0
 	url_parts=urllib.parse.urlparse(ping_file_url)
 	
@@ -144,7 +145,11 @@ def ping_poll_loop(ping_file_url,chk_interval=5):
 			#if this is a remote file
 			elif(url_parts.scheme in ['http','https']):
 				#get the remote data using the python requests library
-				result=requests.get(ping_file_url)
+				if(ssl_cert_check):
+					result=requests.get(ping_file_url)
+				else:
+#					print('Making request to ',ping_file_url,' without verifying ssl cert...') #debug
+					result=requests.get(ping_file_url,verify=False)
 				
 				#if there was not an error when accessing this url
 				if((result.status_code>=200) and (result.status_code<400)):
@@ -189,7 +194,21 @@ if(__name__=='__main__'):
 		default=5
 	)
 	
+	parser.add_argument(
+		'--ssl-cert-check',
+		action='store_true',
+		dest='ssl_cert_check',
+		help='Check ssl certificates'
+	)
+	parser.add_argument(
+		'--no-ssl-cert-check',
+		action='store_false',
+		dest='ssl_cert_check',
+		help='Do NOT check ssl certificates'
+	)
+	parser.set_defaults(ssl_cert_check=True)
+	
 	args=parser.parse_args()
 	
-	ping_poll_loop(args.url,chk_interval=args.chk_interval)
+	ping_poll_loop(args.url,chk_interval=args.chk_interval,ssl_cert_check=args.ssl_cert_check)
 

@@ -37,6 +37,10 @@
 (define in->m (lambda (in) (ft->m (/ in 12))))
 (define cm->in (lambda (cm) (m->in (/ cm 100.0))))
 (define in->cm (lambda (in) (* (in->m in) 100)))
+(define mi->ft (lambda (mi) (* mi 5280)))
+(define ft->mi (lambda (ft) (* ft (/ 1 (mi->ft 1)))))
+(define mi->km (lambda (mi) (/ (ft->m (mi->ft mi)) 1000)))
+(define km->mi (lambda (km) (* km (/ 1 (mi->km 1)))))
 
 ;speed
 (define kt->mps (lambda (kt) (* kt 0.51444)))

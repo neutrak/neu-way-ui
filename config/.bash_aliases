@@ -25,8 +25,8 @@ alias cp='cp -p -v'
 #all terminals this will run on are expected to have color support
 alias ls='ls --color=always'
 alias grep='grep --color=always'
-alias egrep='egrep --color=always'
-alias fgrep='fgrep --color=always'
+alias egrep='grep -E --color=always'
+alias fgrep='grep -F --color=always'
 
 #helpful program extensions
 alias youtube-dl='youtube-dl --no-mtime'

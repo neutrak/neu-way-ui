@@ -381,6 +381,10 @@ install_neu_way_ui_theme () {
 		sudo aa-complain /etc/apparmor.d/fr.emersion.Mako
 		sudo aa-disable /etc/apparmor.d/fr.emersion.Mako
 	fi
+	
+	#NOTE: While I use bsync ( https://github.com/dooblem/bsync ) for syncing and have skimmed its source code as of 2023-01-16 and believe it to be safe
+	#I am not installing it by default here because I don't think that's something this installer should do until/unless it becomes part of the offical repositories
+	#but when/if that ends up in AUR and debian repos, I should add it to the theme dependencies
 
 	#NOTE: we use the script scripts/encryption-setup.sh in order to validate, and if necessary configure, system encryption
 	#we depend on that file being included in the same package as this script; it's a dependency

@@ -44,7 +44,8 @@ fi
 #iff this is wayland, use wayland for mpv video output
 if [ $is_wayland == "true" ]
 then
-	alias mpv="mpv -vo=wlshm"
+#	alias mpv="mpv --vo=wlshm" # MEMORY LEAK on *buntu 22.04 :(
+	alias mpv="mpv --vo=gpu"
 fi
 
 #short scripts

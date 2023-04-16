@@ -380,6 +380,12 @@ install_neu_way_ui_theme () {
 		#because otherwise apparmor doesn't know the profile exists and can't set it to disabled
 		sudo aa-complain /etc/apparmor.d/fr.emersion.Mako
 		sudo aa-disable /etc/apparmor.d/fr.emersion.Mako
+		
+		#set snap to only run updates on saturday mornings (not every day)
+		#sudo snap set system refresh.timer=sat1,00:00-2:00
+		
+		#set snap to never auto-update packages; only when installing new versions is explicitly requested
+		#sudo snap refresh --hold
 	fi
 	
 	#NOTE: While I use bsync ( https://github.com/dooblem/bsync ) for syncing and have skimmed its source code as of 2023-01-16 and believe it to be safe
@@ -444,20 +450,28 @@ install_neu_way_ui_theme () {
 	#for arch plymouth isn't in the official repos so we have to get it from the AUR and compile it ourselves
 	if [ "$distro" == 'arch' ]
 	then
-		pause
-		#install "plymouth-git" from AUR
-		install_aur_package "plymouth-git"
+		#NOTE: disabled as of 2023-04-09 because
+		#	a) this never actually worked properly on arch
+		#	b) we shouldn't depend on AUR packages if possible
+		#	c) it's just not a strictly necessary feature
 		
-		#if plymouth was actually installed (and the installation wasn't just cancelled)
-		#then set the plymouth theme
-		if [ "$(which plymouth)" != "" ]
-		then
-			pause
-			sudo cp -r -p -v config/plymouth/neu-way-theme/* /usr/share/plymouth/themes/
-			
-			#NOTE: the -R switch here rebuilds the kernel image (equivalent to update-initramfs -u on *buntu)
-			sudo plymouth-set-default-theme -R neu-way-logo
-		fi
+		#however if at some point plymouth is in the normal arch packages AND this actually works
+		#then it SHOULD be re-enabled
+		
+#		pause
+#		#install "plymouth-git" from AUR
+#		install_aur_package "plymouth-git"
+#		
+#		#if plymouth was actually installed (and the installation wasn't just cancelled)
+#		#then set the plymouth theme
+#		if [ "$(which plymouth)" != "" ]
+#		then
+#			pause
+#			sudo cp -r -p -v config/plymouth/neu-way-theme/* /usr/share/plymouth/themes/
+#			
+#			#NOTE: the -R switch here rebuilds the kernel image (equivalent to update-initramfs -u on *buntu)
+#			sudo plymouth-set-default-theme -R neu-way-logo
+#		fi
 	#plymouth configuration for ubuntu
 	#plymouth is in the repos so this just copies config and sets as default
 	elif [ "$distro" == 'ubuntu' ]
@@ -563,7 +577,24 @@ install_neu_way_ui_theme () {
 			ln -s "${HOME}/.config/custom-themes/neu-way-ui/config/${cfg_file}" "${HOME}/${cfg_file}"
 		fi
 	done
-
+	
+	#TODO: null-route suspicious hosts by adding /etc/hosts entries
+	#this includes any known malware or malicious software vendors
+	#and also make a command-line option for toggling this in case for some reason it's not desirable
+	#but it should do it by default because I might forget to use the switch
+	#and I want those null routes on my machines
+	#TODO: if null routing and redirects are enabled, write this to /etc/hosts, in ADDITION to all existing contents (>>)
+	#	# twitter.com -> nitter.net
+	#	185.246.188.57	twitter.com
+	#	
+	#	# null route facebook
+	#	0.0.0.0 facebook.com
+	#
+	#	# null route microsoft (inc. bing)
+	#	0.0.0.0 microsoft.com
+	#	0.0.0.0 bing.com
+	#
+	
 	#decrypt private-config from whatever GPG or ccrypt package it's in
 	#as it should be stored in an encrypted format
 	#we should NEVER include logins and passwords

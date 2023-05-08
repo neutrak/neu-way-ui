@@ -56,6 +56,13 @@ then
 	. ~/.bash_aliases
 fi
 
+#set COLORTERM so that alacritty is recognized correctly
+#as a color terminal in circumstances it otherwise wouldn't be
+if [ "$TERM" == 'alacritty' ]
+then
+	COLORTERM=truecolor
+	export COLORTERM
+fi
 
 #detect which linux distribution is in use
 #supported distributions are currently arch and ubuntu

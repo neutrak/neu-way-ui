@@ -439,10 +439,14 @@ install_neu_way_ui_theme () {
 	compile_custom_programs
 
 	#install any necessary fonts at this time
-	#we use source code pro for alacritty so install that now
 	mkdir -p "${HOME}/.fonts/"
+	
+	#we use source code pro for alacritty so install that now
 	cp -r -p -v "${HOME}/.config/custom-themes/neu-way-ui/assets-images-svgs/fonts/source-code-pro-release" "${HOME}/.fonts"
-
+	
+	#we use IntelOne Mono for alacritty so install that now
+	cp -r -p -v "${HOME}/.config/custom-themes/neu-way-ui/assets-images-svgs/fonts/intel-one-mono-1.2.1" "${HOME}/.fonts"
+	
 	#update font cache
 	fc-cache
 

@@ -50,7 +50,7 @@ fi
 
 #short scripts
 alias bios='[ -f /usr/sbin/dmidecode ] && sudo -v && echo -n "Motherboard" && sudo /usr/sbin/dmidecode -t 1 | grep "Manufacturer\|Product Name\|Serial Number" | tr -d "\t" | sed "s/Manufacturer//" && echo -ne "\nBIOS" && sudo /usr/sbin/dmidecode -t 0 | grep "Vendor\|Version\|Release" | tr -d "\t" | sed "s/Vendor//"'
-alias spellcheck='echo y | ~/.config/custom-themes/neu-way-ui/scripts/line_diff.py --color --line ""'
+alias spellcheck='echo y | ~/.config/custom-themes/neu-way-ui/scripts/line-diff.py --color --line ""'
 alias spell='spellcheck'
 
 

@@ -317,7 +317,7 @@ install_neu_way_ui_theme () {
 		
 		#install userspace packages
 		pause
-		sudo pacman -S pass sway swayidle swaylock waybar otf-font-awesome xorg-xwayland alacritty firefox pavucontrol gnome-calendar gnome-online-accounts rofi thunderbird wl-clipboard khal vdirsyncer mako grim blueman oath-toolkit keepassxc remind at neovim python-pynvim pulseaudio-equalizer pavucontrol man-db man-pages texinfo vim cryptsetup minicom pcmanfm ncdu htop inkscape curl mpv mousepad ripgrep bc netctl dialog rsync encfs
+		sudo pacman -S pass sway swayidle swaylock waybar otf-font-awesome xorg-xwayland alacritty firefox pavucontrol gnome-calendar gnome-online-accounts rofi thunderbird wl-clipboard khal vdirsyncer mako grim blueman oath-toolkit keepassxc remind at neovim python-pynvim pulseaudio-equalizer pavucontrol man-db man-pages texinfo vim cryptsetup minicom pcmanfm ncdu htop inkscape curl mpv mousepad ripgrep bc netctl dialog rsync encfs sonic-visualiser
 
 		#install (and if necessary build) anything not available through repos
 		
@@ -362,7 +362,7 @@ install_neu_way_ui_theme () {
 		
 		#install userspace packages
 		pause
-		sudo apt-get install pass sway swayidle swaylock waybar xwayland ncurses-term firefox pavucontrol gnome-calendar gnome-online-accounts rofi libappindicator-* thunderbird wl-clipboard khal vdirsyncer vdirsyncer-doc mako-notifier grim blueman oathtool keepassxc remind at neovim python3-pynvim pulseaudio-equalizer pavucontrol vim cryptsetup minicom pcmanfm ncdu htop inkscape ccrypt curl mpv mousepad ripgrep rsync encfs
+		sudo apt-get install pass sway swayidle swaylock waybar xwayland ncurses-term firefox pavucontrol gnome-calendar gnome-online-accounts rofi libappindicator-* thunderbird wl-clipboard khal vdirsyncer vdirsyncer-doc mako-notifier grim blueman oathtool keepassxc remind at neovim python3-pynvim pulseaudio-equalizer pavucontrol vim cryptsetup minicom pcmanfm ncdu htop inkscape ccrypt curl mpv mousepad ripgrep rsync encfs sonic-visualiser
 
 		#install (and if necessary build) anything not available through repos
 		

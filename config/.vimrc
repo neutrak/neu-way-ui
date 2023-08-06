@@ -108,12 +108,28 @@ set foldlevel=4
 
 "automatically scroll down every so often based on the provided delay
 :function! Autoscroll(delay_ms)
-	:exe "normal \<C-e>"
-	:let delay_ms=a:delay_ms.'m'
-	:exe 'sleep '.delay_ms
-	:normal j
-	:redraw
-	:exe 'call Autoscroll('.a:delay_ms.')'
+	" NOTE: vimscript does NOT tailcall optimize
+	" so this recursive solution has limited value
+	" but is left for reference
+"	:exe "normal \<C-e>"
+"	:let delay_ms=a:delay_ms.'m'
+"	:exe 'sleep '.delay_ms
+"	:normal j
+"	:redraw
+"	:exe 'call Autoscroll('.a:delay_ms.')'
+	
+	" this iterative solution works better
+	:let current_line=line(".")
+	:let last_line=line("$")
+	:while current_line<=last_line
+		:exe "normal \<C-e>"
+		:let delay_ms=a:delay_ms.'m'
+		:exe 'sleep '.delay_ms
+		:normal j
+		:redraw
+		
+		:let current_line+=1
+	:endwhile
 :endfunction
 
 

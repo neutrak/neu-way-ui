@@ -45,7 +45,8 @@ fi
 if [ $is_wayland == "true" ]
 then
 #	alias mpv="mpv --vo=wlshm" # MEMORY LEAK on *buntu 22.04 :(
-	alias mpv="mpv --vo=gpu"
+#	alias mpv="mpv --vo=gpu"
+	alias mpv="mpv --vo=gpu --ao=pulse," #default to pulseaudio, required for bluetooth headsets (falls back to other sound services if pulse isn't configured due to comma)
 fi
 
 #short scripts

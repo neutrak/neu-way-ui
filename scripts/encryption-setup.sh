@@ -308,6 +308,10 @@ encsetup_home()
 	#encryption setup is done!
 	#if we had a backup on the root filesystem, restore it now
 	
+	#show recovery key
+	echo "Recovery key (write this down and store it somewhere secure):"
+	sudo dmsetup table --target crypt --showkey /dev/mapper/home
+	
 	if [ -d "/preenc-backup" ]
 	then
 		#copy data from the preenc backup to home
@@ -325,6 +329,12 @@ encsetup_home()
 	
 	echo "Home is now encrypted!"
 	echo "You will need to provide your encryption password on boot in order to access the data in /home.  "
+	
+	read -p "Do you want to print the LUKS headers?  This allows you to recover data from this drive if you forget the password or the headers become corrupted.  (y/n)" show_luks_headers
+	if [ "$show_luks_headers" == 'YES' ] || [ "$show_luks_headers" == 'yes' ] [ "$show_luks_headers" == 'Y' ] [ "$show_luks_headers" == 'y' ]
+	then
+		sudo cryptsetup luksDump --dump-master-key "$home_dev"
+	fi
 }
 
 #this is loosely based on the stackoverflow answer at https://unix.stackexchange.com/questions/64551/how-do-i-set-up-an-encrypted-swap-file-in-linux#64569
@@ -399,6 +409,12 @@ encsetup_swap()
 			echo "swap_name=${swap_name}" #debug
 			echo "loop=${loop}" #debug
 			
+			#TODO: fix the following errors
+			#cryptsetup: WARNING: ${swap_path}: couldn't determine device type, assuming default
+			#    (plain).
+			#cryptsetup: WARNING: Resume target ${swap_path} uses a key file
+			#Device ${swap_path} is not a valid LUKS device.
+			
 			sudo cryptsetup open "${loop}" "${swap_name}" --type plain --key-file /dev/urandom --key-size 256
 			
 			#add a line to /etc/crypttab to use this encrypted swap device on every reboot
@@ -413,7 +429,13 @@ encsetup_swap()
 		then
 			#zero out the device
 			sudo dd if=/dev/zero of="${swap_path}" bs=512 count="$(("$(lsblk -o NAME,SIZE --bytes | fgrep "$(basename ${swap_path})" | awk '{print $2}')" / 512))" status=progress
-
+			
+			#TODO: fix the following errors
+			#cryptsetup: WARNING: ${swap_path}: couldn't determine device type, assuming default
+			#    (plain).
+			#cryptsetup: WARNING: Resume target ${swap_path} uses a key file
+			#Device ${swap_path} is not a valid LUKS device.
+			
 			sudo cryptsetup open "${swap_path}" "${swap_name}" --type plain --key-file /dev/urandom --key-size 256
 
 			#add a line to /etc/crypttab to use this encrypted swap device on every reboot

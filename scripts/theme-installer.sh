@@ -462,7 +462,7 @@ install_neu_way_ui_theme () {
 		#however if at some point plymouth is in the normal arch packages AND this actually works
 		#then it SHOULD be re-enabled
 		
-#		pause
+		pause
 #		#install "plymouth-git" from AUR
 #		install_aur_package "plymouth-git"
 #		

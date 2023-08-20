@@ -402,7 +402,7 @@ def diff_patch(start_str,diff_desc_str):
     return ret_str
 
 import os
-def get_dictionary(dict_paths=[os.getenv('HOME')+'/words.txt','/usr/dict/words','/usr/share/dict/words'],hard_fail=True):
+def get_dictionary(dict_paths=[os.getenv('HOME')+'/words.txt',os.getenv('HOME')+'/documents/dictionaries-wordlists/words.txt','/usr/dict/words','/usr/share/dict/words'],hard_fail=True):
     
     path=''
     for dict_path in dict_paths:

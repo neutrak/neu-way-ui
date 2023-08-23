@@ -6,7 +6,7 @@
 //    "margin-bottom": 2, //margin in pixels
     
     // Choose the order of the modules
-    "modules-left": ["network"],
+    "modules-left": ["custom/hostname","network"],
     "modules-center": [],
 //    "modules-center": ["sway/window"],
     "modules-right": ["cpu", "temperature", "custom/load-avg", "memory", "disk#rootfs", "disk#homefs"],
@@ -177,6 +177,9 @@
         "interval":10
     },
     "network": {
+        // TODO: auto-detect network interface using dflt_if="$(route | fgrep 'default' | awk '{print $8}')"
+        // to work around this bug: https://github.com/Alexays/Waybar/issues/1327
+        // alternatively just upgrade everything to a newer version of waybar that has a fix in it
         // "interface": "wlp2*", // (Optional) To force the use of this interface
         "format-wifi": "{ifname}: {essid} {bandwidthUpBits} / {bandwidthDownBits} ",
         "format-ethernet": "{ifname}: {bandwidthUpBits} / {bandwidthDownBits} ",
@@ -216,6 +219,13 @@
         "interval":600,
         "exec":"echo \" \"",
         "tooltip":false
+    },
+    "custom/hostname": {
+        "format":"<span>💻</span> {}",
+        "interval":600,
+        "exec":"hostname",
+        "tooltip":true,
+        "tooltip-format":"hostname"
     }
 //    "custom/media": {
 //        "format": "{icon} {}",

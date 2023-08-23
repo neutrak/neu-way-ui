@@ -93,7 +93,8 @@ window#waybar.chromium {
 #mode,
 #idle_inhibitor,
 #mpd,
-#custom-load-avg {
+#custom-load-avg,
+#custom-hostname {
     padding: 2px 8px;
     
     background-color: #64727D;
@@ -146,6 +147,15 @@ window#waybar.chromium {
 
 label:focus {
     background-color: #000000;
+}
+
+#clock {
+/*
+    display:flex;
+    align-items:center;
+    justify-content:center;
+*/
+    padding-top:5px; /* hack because waybar doesn't support css display:flex */
 }
 
 #cpu.warning {
@@ -230,5 +240,16 @@ label:focus {
 }
 #custom-launch-term:hover, #custom-launch-firefox:hover, #custom-launch-thunderbird:hover, #custom-launch-pcmanfm:hover, #custom-run:hover {
     background-color: rgba(61,233,174,0.4);
+}
+#custom-hostname {
+    background-color: rgba(61,174,233,0.5);
+/*
+    display:flex;
+    align-items:center;
+    justify-content:center;
+*/
+    /* hack because waybar doesn't support css display:flex */
+    padding-top:5px;
+    padding-bottom:3px;
 }
 

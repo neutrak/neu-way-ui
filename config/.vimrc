@@ -101,7 +101,7 @@ set foldlevel=4
 :endfunction
 
 " User proper tab indenting
-":call Tab_Indent()
+:call Tab_Indent()
 
 " Use space indenting instead of (the correct and proper) tab indenting
 ":call Space_Indent(4)

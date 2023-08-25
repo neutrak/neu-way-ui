@@ -1,0 +1,290 @@
+{
+	"sway/workspaces": {
+		"all-outputs":true,
+		"disable-scroll":false,
+		"disable-click":false,
+		"disable-scroll-wraparound":false,
+		"format": "{name}",
+		"persistent_workspaces":{
+			"0":[],
+			"1":[],
+			"2":[],
+			"3":[],
+			"4":[],
+			"5":[],
+			"6":[],
+			"7":[],
+			"8":[],
+			"9":[]
+		}
+	},
+	"comment-original/sway/workspaces": {
+		"disable-scroll": true,
+		"all-outputs": true,
+		"format": "{name}: {icon}",
+		"format-icons": {
+			"1": "",
+			"2": "",
+			"3": "",
+			"4": "",
+			"5": "",
+			"urgent": "",
+			"focused": "",
+			"default": ""
+		}
+	},
+	"sway/mode": {
+		"format": "<span style=\"italic\">{}</span>"
+	},
+	"comment-original/mpd": {
+		"format": "{stateIcon} {consumeIcon}{randomIcon}{repeatIcon}{singleIcon}{artist} - {album} - {title} ({elapsedTime:%M:%S}/{totalTime:%M:%S}) ⸨{songPosition}|{queueLength}⸩ ",
+		"format-disconnected": "Disconnected ",
+		"format-stopped": "{consumeIcon}{randomIcon}{repeatIcon}{singleIcon}Stopped ",
+		"unknown-tag": "N/A",
+		"interval": 2,
+		"consume-icons": {
+			"on": " "
+		},
+		"random-icons": {
+			"off": "<span color=\"#f53c3c\"></span> ",
+			"on": " "
+		},
+		"repeat-icons": {
+			"on": " "
+		},
+		"single-icons": {
+			"on": "1 "
+		},
+		"state-icons": {
+			"paused": "",
+			"playing": ""
+		},
+		"tooltip-format": "MPD (connected)",
+		"tooltip-format-disconnected": "MPD (disconnected)"
+	},
+	"idle_inhibitor": {
+		"format": "{icon}",
+		"format-icons": {
+			"activated": "",
+			"deactivated": ""
+		},
+		"comment-tooltip-format": "Idle Inhibitor {status}"
+	},
+	"tray": {
+		"comment-icon-size": 21,
+		"spacing": 10,
+		"show-passive-items": true
+	},
+
+	"clock": {
+		"comment-tooltip-format": "<big>{:%Y %B}</big>\n<tt><small>{calendar}</small></tt>",
+		
+		"timezone": "America/Toronto",
+		"format": "<span line_height=\"1.1\">{:%a %Y-%m-%d %R}</span>",
+		"interval": 1,
+		
+		"on-click": "gnome-calendar",
+		"on-click-right": "gnome-calendar"
+	},
+
+	"cpu": {
+		"format": "{usage}% ",
+		"tooltip": true,
+		"interval": 1,
+		"comment-states":{
+			"good": 15
+		},
+		"states":{
+			"warning": 60,
+			"critical": 85
+		}
+	},
+
+	"temperature": {
+		"comment-lines-0":[
+			"this temporary file in RAM gets populated by sway via an exec line at startup",
+			"and contains an average from the temperatures of all cores on the machine",
+			"regardless of what machine this config is running on"
+		],
+		"hwmon-path": "/tmp/cpu-temp-avg",
+		
+		"comment-lines-1":[
+			"NOTE: for desktops critical temperature is typically around 70 degrees C",
+			"laptops run a little hotter and critical temperature for a laptop is typically around 85 degrees C",
+			"but since laptops idle at around 55 degrees C this should be a reasonable value for both",
+			"i.e. your machine should never get this hot unless you're doing something pretty extreme, even for a laptop"
+		],
+		"critical-threshold": 70,
+		
+		"format-critical": "{temperatureC}°C ",
+		"format": "{temperatureC}°C ",
+		"format-icons": ["", "", ""],
+		"interval":5
+	},
+	"memory": {
+		"format": "{avail:0.2f}GiB ",
+		"interval": 10,
+		"comment-states":{
+			"good": 20
+		},
+		"states": {
+			"warning": 65,
+			"critical": 80
+		}
+	},
+	"disk#rootfs": {
+		"path": "/",
+		"format": "{free} on /",
+		"tooltip": true,
+		"comment-states":{
+			"good": 20
+		},
+		"states": {
+			"warning": 60,
+			"critical": 80
+		}
+	},
+	"disk#homefs": {
+		"path": "/home",
+		"format": "{free} on /home",
+		"tooltip": true,
+		"comment-states":{
+			"good":20
+		},
+		"states": {
+			"warning": 60,
+			"critical": 80
+		}
+	},
+	"comment-original/backlight": {
+		"comment-device": "acpi_video1",
+		"format": "{percent}% {icon}",
+		"format-icons": ["", ""]
+	},
+
+	"battery": {
+		"comment-states":{
+			"good":95
+		},
+		"states": {
+			"warning": 40,
+			"critical": 15
+		},
+		"format": "{capacity}% {icon}",
+		"format-charging": "{capacity}% ",
+		"format-plugged": "{capacity}% ",
+		"format-alt": "{time} {icon}",
+		
+		"comment-lines":[
+			"An empty format will hide the module"
+		],
+		"comment-format-good": "",
+		"comment-format-full": "",
+		
+		"format-icons": ["", "", "", "", ""],
+		"interval":10
+	},
+	"network": {
+		"comment-lines":[
+			"TODO: auto-detect network interface using dflt_if=\"$(route | fgrep 'default' | awk '{print $8}')\"",
+			"to work around this bug: https://github.com/Alexays/Waybar/issues/1327",
+			"alternatively just upgrade everything to a newer version of waybar that has a fix in it"
+		],
+		"comment-re-comment-innterface":"(Optional) To force the use of this interface",
+		"comment-interface": "wlp2*",
+		"format-wifi": "{ifname}: {essid} {bandwidthUpBits} / {bandwidthDownBits} ",
+		"format-ethernet": "{ifname}: {bandwidthUpBits} / {bandwidthDownBits} ",
+		"format-linked": "{ifname} (No IP) ",
+		"format-disconnected": "Disconnected ⚠",
+		"format-alt": "{ifname}: {ipaddr}/{cidr} ",
+		"interval":5
+	},
+
+	"pulseaudio": {
+		// "scroll-step": 1, // %, can be a float
+		"format": "{volume}% {icon} {format_source}",
+		"format-bluetooth": "{volume}%  {format_source}",
+		"format-bluetooth-muted": "   {format_source}",
+		"format-muted": " {format_source}",
+		"format-source": " {volume}% ",
+		"format-source-muted": " ",
+		"format-icons": {
+			"headphone": "",
+			"hands-free": "",
+			"headset": "",
+			"phone": "",
+			"portable": "",
+			"car": "",
+			"default": ["", "", ""]
+		},
+ 		"comment-re-on-click":"pulseaudio outut control",
+		"on-click": "pavucontrol",
+ 		"comment-re-on-click-right":"pulseaudio equalizer control",
+		"on-click-right": "qpaeq"
+	},
+	"custom/spacer": {
+		"format":"{}",
+		"interval":600,
+		"exec":"echo \" \"",
+		"tooltip":false
+	},
+	"custom/launch-term": {
+		"format":"{}",
+		"interval":600,
+		"exec":"echo \"\"",
+		"tooltip":false,
+		"on-click":"alacritty"
+	},
+	"custom/run": {
+		"format":"{}",
+		"interval":600,
+		"exec":"echo \"\"",
+		"tooltip":false,
+		"on-click":"rofi -show run -disable-history -lines 8"
+	},
+	"custom/launch-firefox": {
+		"format":"{}",
+		"interval":600,
+		"exec":"echo \"\"",
+		"tooltip":false,
+		"on-click":"firefox"
+	},
+	"custom/launch-thunderbird": {
+		"format":"{}",
+		"interval":600,
+		"exec":"echo \"\"",
+		"tooltip":false,
+		"on-click":"thunderbird"
+	},
+	"custom/launch-pcmanfm": {
+		"format":"{}",
+		"interval":600,
+		"exec":"echo \"\"",
+		"tooltip":false,
+		"on-click":"pcmanfm"
+	},
+	"comment-original/custom/media": {
+		"format": "{icon} {}",
+		"return-type": "json",
+		"max-length": 40,
+		"format-icons": {
+			"default": "🎜"
+		},
+		"escape": true,
+		"comment-exec": "$HOME/.config/waybar/mediaplayer.py 2> /dev/null"
+	},
+	"custom/load-avg": {
+		"format":"{} ",
+		"interval":5,
+		"exec":"uptime | awk -F ': ' '{print $NF}' | sed 's/\\,//g'",
+		"tooltip":false
+	},
+	"custom/hostname": {
+		"format":"<span line_height=\"1.1\">💻</span> {}",
+		"interval":600,
+		"exec":"hostname",
+		"tooltip":true,
+		"tooltip-format":"hostname"
+	}
+}
+

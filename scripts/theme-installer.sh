@@ -340,6 +340,9 @@ install_neu_way_ui_theme () {
 	then
 		echo 'Ubuntu Linux detected; installing packages using apt-get'
 		
+		ubuntu_version="$(lsb_release -a | fgrep 'Description:' | egrep -o '[0-9]+\.[0-9]+.*')"
+		echo "Detected Ubuntu version ${ubuntu_version}"
+		
 		#make sure /tmp is mounted as a tmpfs filesystem and not on the root partition
 		#because for some reason this isn't default in ubuntu
 		if [ ! -e "/etc/systemd/system/tmp.mount" ]
@@ -358,7 +361,23 @@ install_neu_way_ui_theme () {
 		
 		#install python libraries
 		pause
-		pip3 install pytz tzlocal icalendar recurring-ical-events
+		
+		#NOTE: earlier in this script we already validated that we are running in the neu-way-ui theme root
+		#so we know where this script is even if the theme hasn't officially been fully installed yet
+		
+		#if the ubuntu version in use is greater than 22.04
+		if [ "$(./scripts/version-cmp.py "${ubuntu_version}" "22.04")" -gt 0 ]
+		then
+			#global python installation via pip is deprecated; use debian packages instead
+			#python packages but installed via apt
+			sudo apt-get install python3-full python3-pytzdata python3-tzlocal python3-icalendar python3-recurring-ical-events
+	#		pip3 install pytz tzlocal icalendar recurring-ical-events #error: externally-managed-environment (2023-08-25, on ubuntu >= 23.04)
+		#if we're on 22.04 LTS (the earliest version supported by this installer)
+		else
+			#not all packages are available in the repos so install global python packages via pip
+			pip3 install pytz tzlocal icalendar recurring-ical-events
+		fi
+		
 		
 		#install userspace packages
 		pause

@@ -232,7 +232,7 @@
 	
 	(string-concatenate (list "0x" (hexpad (inner-hexstring n regsize) regsize))))
 
-;returns a decimal number equivalent to the given hexidecimal string
+;returns a decimal number equivalent to the given hexadecimal string
 (define (hex->dec hexstr)
 	(define (hexdigit->dec hexdigit)
 		(cond
@@ -288,6 +288,37 @@
 		0
 		(begin
 			(+ (* 16 (hex->dec (substring hexstr 0 (- (string-length hexstr) 1)))) (hexdigit->dec (substring hexstr (- (string-length hexstr) 1) (- (string-length hexstr) 0)))))))
+
+;returns a hexadecimal string equivalent to the given decimal number value
+(define (dec->hex dec-value)
+	(define (decdigit->hex decdigit)
+		(cond
+			((< decdigit 10)
+				(number->string decdigit)
+			)
+			((= decdigit 10)
+				"A"
+			)
+			((= decdigit 11)
+				"B"
+			)
+			((= decdigit 12)
+				"C"
+			)
+			((= decdigit 13)
+				"D"
+			)
+			((= decdigit 14)
+				"E"
+			)
+			((= decdigit 15)
+				"F"
+			)
+		))
+	
+	(if (>= dec-value 16)
+		(string-append (dec->hex (floor (/ dec-value 16))) (decdigit->hex (% dec-value 16)))
+		(decdigit->hex dec-value)))
 
 ;ratio is just a division
 (define (ratio a b)

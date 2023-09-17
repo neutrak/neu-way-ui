@@ -1,5 +1,10 @@
 #!/bin/bash
 
+#all errors are fatal errors
+#meaning if we reach the end where a message is displayed
+#everything prior to that definitely executed correctly
+set -e
+
 #clear the primary (middle-click) clipboard
 #NOTE: I know wl-copy has a -c flag that's supposed to clear the clipboard, but it doesn't work reliably
 echo -n "" | wl-copy -p

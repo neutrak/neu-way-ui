@@ -264,7 +264,7 @@ encsetup_home()
 	#wipe the device at the block level
 	#this ensures that any existing data (even on ununsed sectors) is cleanly removed
 	sudo cryptsetup open --type plain -d /dev/urandom "$home_dev" to_be_wiped
-	sudo dd if=/dev/zero of="/dev/mapper/to_be_wiped" bs=512 count="$(("$(lsblk -o NAME,SIZE --bytes | egrep -o "to_be_wiped.*" | awk '{print $2}')" / 512))" status=progress
+	sudo dd if=/dev/zero of="/dev/mapper/to_be_wiped" bs=4096 count="$(("$(lsblk -o NAME,SIZE --bytes | egrep -o "to_be_wiped.*" | awk '{print $2}')" / 4096))" status=progress
 	sudo cryptsetup close to_be_wiped
 	
 	#initialize it as a luksFormat encrypted device with an ext4 filesystem

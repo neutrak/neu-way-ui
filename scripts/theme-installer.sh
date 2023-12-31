@@ -313,7 +313,9 @@ install_neu_way_ui_theme () {
 		
 		#install python libraries
 		pause
-		pip install pytz tzlocal icalendar recurring-ical-events
+#		pip install pytz tzlocal icalendar recurring-ical-events
+#		sudo pacman -S python-pytz python-tzlocal python-icalendar python-recurring-ical-events
+		sudo pacman -S python-pytz python-tzlocal python-icalendar
 		
 		#install userspace packages
 		pause
@@ -323,6 +325,10 @@ install_neu_way_ui_theme () {
 		
 		#install "ccrypt" from AUR
 		install_aur_package "ccrypt"
+		
+		#install "python-recurring-ical-events" from AUR
+		install_aur_package "python-x-wr-timezone"
+		install_aur_package "python-recurring-ical-events"
 		
 		#ensure that this user is a member of the necessary groups
 		#which are at a minimum:

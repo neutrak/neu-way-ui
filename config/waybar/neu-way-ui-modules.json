@@ -241,7 +241,7 @@
 		"interval":600,
 		"exec":"echo \"\"",
 		"tooltip":false,
-		"on-click":"rofi -show run -disable-history -lines 8"
+		"on-click":"rofi -show run -theme ~/.config/custom-themes/neu-way-ui/config/rofi/neu-rofi.rasi -disable-history -lines 8"
 	},
 	"custom/launch-firefox": {
 		"format":"{}",

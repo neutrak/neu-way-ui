@@ -318,9 +318,10 @@ install_neu_way_ui_theme () {
 		sudo pacman -S python-pytz python-tzlocal python-icalendar
 		
 		#install userspace packages
+		#TODO: add waypipe to this list if/when it is in the official arch linux repositories
 		pause
 		sudo pacman -S pass sway swayidle swaylock swaybg waybar otf-font-awesome xorg-xwayland alacritty firefox pavucontrol gnome-calendar gnome-online-accounts rofi thunderbird wl-clipboard khal vdirsyncer mako grim blueman oath-toolkit keepassxc remind at neovim python-pynvim pulseaudio-equalizer pavucontrol man-db man-pages texinfo vim cryptsetup minicom pcmanfm ncdu htop inkscape curl mpv mousepad ripgrep bc netctl dialog rsync encfs sonic-visualiser
-
+		
 		#install (and if necessary build) anything not available through repos
 		
 		#install "ccrypt" from AUR
@@ -387,7 +388,7 @@ install_neu_way_ui_theme () {
 		
 		#install userspace packages
 		pause
-		sudo apt-get install pass sway swayidle swaylock waybar xwayland ncurses-term firefox pavucontrol gnome-calendar gnome-online-accounts rofi libappindicator-* thunderbird wl-clipboard khal vdirsyncer vdirsyncer-doc mako-notifier grim blueman oathtool keepassxc remind at neovim python3-pynvim pulseaudio-equalizer pavucontrol vim cryptsetup minicom pcmanfm ncdu htop inkscape ccrypt curl mpv mousepad ripgrep rsync encfs sonic-visualiser
+		sudo apt-get install pass sway swayidle swaylock waybar xwayland ncurses-term firefox pavucontrol gnome-calendar gnome-online-accounts rofi libappindicator-* thunderbird wl-clipboard khal vdirsyncer vdirsyncer-doc mako-notifier grim blueman oathtool keepassxc remind at neovim python3-pynvim pulseaudio-equalizer pavucontrol vim cryptsetup minicom pcmanfm ncdu htop inkscape ccrypt curl mpv mousepad ripgrep rsync encfs sonic-visualiser waypipe
 
 		#install (and if necessary build) anything not available through repos
 		

@@ -661,11 +661,33 @@
 
 ;find the weight on the given celestial body
 ;using earth weight (in lbs) as a starting point
+;NOTE: if you add more options to this, the acceleration values (constants passed into find-weight) are in units of m/(s^2)
+;in order to find this value for an unknown object, we need as input that object's mass and radius
+;then we can calculate the acceleration due to gravity on that body's surface
+;	F[G] = (Gm[1]m[2])/(r^2)
+; on earth, we can calculate
+;	F = ma
+;	F[G] = m(g)
+; thus it follows
+;	F[G] = m(Gm[earth])/(r^2)
+; and dividing out the mass (because F=ma)
+;	g = Gm[earth]/(r^2)
+; the mass is the mass of whatever celestial body you're calculating for
+; and the radius is the distance you are away from the center of that object
+; at the surface, you're the body's radius away from its center (we can assume average radius for our purposes)
+; so if we're calculating acceleration do to gravity on a body's surface, we can get a close answer as
+;	g[body] = Gm[body]/(r[body]^2)
+; G is a constant (for our purposes), and has a value of 6.674×10−11 N*(m^2)/(kg^2)
+; so in our calculation m[body] has units of kilograms, r[body] has units of meters
+; and then our result is meters/(second^2), which is what the below constants are written in
+; and that's how you can add new celestial bodies to this calculation
 (define (weight-on location earth-weight)
 	(let ((mass-kg (/ (/ earth-weight 0.22481) 9.81)))
 		(cond
 			((string= location "Earth")
 				(find-weight mass-kg 9.81))
+			((string= location "Moon") ;(Earth's moon, that is)
+				(find-weight mass-kg 1.629))
 			((string= location "Mars")
 				(find-weight mass-kg 3.71))
 			((string= location "Venus")

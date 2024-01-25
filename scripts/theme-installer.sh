@@ -320,7 +320,7 @@ install_neu_way_ui_theme () {
 		#install userspace packages
 		#TODO: add waypipe to this list if/when it is in the official arch linux repositories
 		pause
-		sudo pacman -S pass sway swayidle swaylock swaybg waybar otf-font-awesome xorg-xwayland alacritty firefox pavucontrol gnome-calendar gnome-online-accounts rofi thunderbird wl-clipboard khal vdirsyncer mako grim blueman oath-toolkit keepassxc remind at neovim python-pynvim pulseaudio-equalizer pavucontrol man-db man-pages texinfo vim cryptsetup minicom pcmanfm ncdu htop inkscape curl mpv mousepad ripgrep bc netctl dialog rsync encfs sonic-visualiser yt-dlp dnsutils
+		sudo pacman -S pass sway swayidle swaylock swaybg waybar otf-font-awesome xorg-xwayland alacritty firefox pavucontrol gnome-calendar gnome-online-accounts rofi thunderbird wl-clipboard khal vdirsyncer mako grim blueman oath-toolkit keepassxc remind at neovim python-pynvim pulseaudio-equalizer pavucontrol man-db man-pages texinfo vim cryptsetup minicom pcmanfm ncdu htop inkscape curl mpv mousepad ripgrep bc netctl dialog rsync encfs sonic-visualiser yt-dlp dnsutils inetutils
 		
 		#install (and if necessary build) anything not available through repos
 		
@@ -343,6 +343,8 @@ install_neu_way_ui_theme () {
 		sudo usermod -a -G 'video' "${active_user}"
 		sudo usermod -a -G 'audio' "${active_user}"
 		sudo usermod -a -G 'uucp' "${active_user}"
+		
+		#TODO: update /etc/security/faillock.conf to set deny=50, fail_interval=1800
 	elif [ "$distro" == 'ubuntu' ]
 	then
 		echo 'Ubuntu Linux detected; installing packages using apt-get'

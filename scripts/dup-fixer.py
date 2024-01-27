@@ -355,7 +355,7 @@ if(__name__=='__main__'):
 	parser.add_argument(
 		'directory',
 		type=str,
-		help='The directory to check for duplicates (subdirectories of this are checked as well); if you arne\'t sure what to provide, try "." (current directory)',
+		help='The directory to check for duplicates (subdirectories of this are checked as well); if you aren\'t sure what to provide, try "." (current directory)',
 		default=None
 	)
 	parser.add_argument(

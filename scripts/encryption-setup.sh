@@ -331,7 +331,7 @@ encsetup_home()
 	echo "You will need to provide your encryption password on boot in order to access the data in /home.  "
 	
 	read -p "Do you want to print the LUKS headers?  This allows you to recover data from this drive if you forget the password or the headers become corrupted.  (y/n)" show_luks_headers
-	if [ "$show_luks_headers" == 'YES' ] || [ "$show_luks_headers" == 'yes' ] [ "$show_luks_headers" == 'Y' ] [ "$show_luks_headers" == 'y' ]
+	if [ "$show_luks_headers" == 'YES' ] || [ "$show_luks_headers" == 'yes' ] || [ "$show_luks_headers" == 'Y' ] || [ "$show_luks_headers" == 'y' ]
 	then
 		sudo cryptsetup luksDump --dump-master-key "$home_dev"
 	fi

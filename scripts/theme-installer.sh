@@ -320,7 +320,7 @@ install_neu_way_ui_theme () {
 		#install userspace packages
 		#TODO: add waypipe to this list if/when it is in the official arch linux repositories
 		pause
-		sudo pacman -S pass sway swayidle swaylock swaybg waybar otf-font-awesome xorg-xwayland alacritty firefox pavucontrol gnome-calendar gnome-online-accounts rofi thunderbird wl-clipboard khal vdirsyncer mako grim blueman oath-toolkit keepassxc remind at neovim python-pynvim pulseaudio-equalizer pavucontrol man-db man-pages texinfo vim cryptsetup minicom pcmanfm ncdu htop inkscape curl mpv mousepad ripgrep bc netctl dialog rsync encfs sonic-visualiser yt-dlp dnsutils inetutils dhcpcd
+		sudo pacman -S pass sway swayidle swaylock swaybg waybar otf-font-awesome xorg-xwayland alacritty firefox pavucontrol gnome-calendar gnome-online-accounts rofi thunderbird wl-clipboard khal vdirsyncer mako grim blueman oath-toolkit keepassxc remind at neovim python-pynvim pulseaudio-equalizer pavucontrol man-db man-pages texinfo vim cryptsetup minicom pcmanfm ncdu htop inkscape curl mpv mousepad ripgrep bc netctl dialog rsync encfs sonic-visualiser yt-dlp dnsutils inetutils dhcpcd wpa_supplicant
 		
 		#install (and if necessary build) anything not available through repos
 		

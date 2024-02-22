@@ -1,10 +1,31 @@
 #define environmental conditions so different aliases can be applied in different contexts
 
-#current session id based on process variables
-#login_session_id=$(cat /proc/"$$"/sessionid)
+#detect which linux distribution is in use
+#supported distributions are currently arch and ubuntu
+#NOTE: for ubuntu lightdm is expected, as is present on xubuntu
+#other display managers require manual configuration
+distro=''
+if [ -n "$(uname -a | grep -F -o 'arch')" ]
+then
+	distro='arch'
+elif [ -n "$(uname -a | grep -F -o 'Ubuntu')" ]
+then
+	distro='ubuntu'
+fi
 
 #current session id from ps because ubuntu is dumb
 login_session_id="$(ps --pid "$$" -o "pid,lsession" | tail -n 1 | awk '{print $2}')"
+
+#run any/all arch-specific behaviour
+if [ "${distro}" == 'arch' ]
+then
+	#current session id based on process variables
+	login_session_id=$(cat /proc/"$$"/sessionid)
+elif [ "${distro}" == 'ubuntu' ]
+then
+	#current session id from ps because ubuntu is dumb
+	login_session_id="$(ps --pid "$$" -o "pid,lsession" | tail -n 1 | awk '{print $2}')"
+fi
 
 #figure out whether the current session is wayland or x11 or cli
 is_wayland=false

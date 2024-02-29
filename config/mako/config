@@ -1,0 +1,6 @@
+#font family and font size
+font=IntelOne Mono Medium 10
+
+#width is in units of pixels; default 300
+width=420
+

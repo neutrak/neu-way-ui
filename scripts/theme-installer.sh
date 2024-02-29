@@ -572,7 +572,7 @@ install_neu_way_ui_theme () {
 	
 	#configure directories under ~/.config
 	#sway, swaylock, waybar, wofi, alacritty
-	cfg_dirs=("sway" "swaylock" "waybar" "rofi" "alacritty")
+	cfg_dirs=("sway" "swaylock" "waybar" "rofi" "alacritty" "mako")
 	for cfg_dir in "${cfg_dirs[@]}"
 	do
 		echo "Debug: Setting configuration for $cfg_dir..." #debug

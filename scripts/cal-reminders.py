@@ -18,8 +18,13 @@ TIMEZONE='America/Toronto'
 
 try:
 	import tzlocal
-	TIMEZONE=tzlocal.get_localzone().zone
-except ImportError as e:
+	try:
+		#recent versions of tzlocal
+		TIMEZONE=tzlocal.get_localzone().key
+	except AttributeError as e:
+		#older versions of tzlocal
+		TIMEZONE=tzlocal.get_localzone().zone
+except (ImportError, AttributeError) as e:
 	pass
 
 print('Using timezone ',TIMEZONE) #debug
@@ -85,7 +90,7 @@ def clear_notifications_for_event(event_id):
 			continue
 		
 		#if this at job matches the event_id we were given
-		event_id_match=os.popen('at -c '+str(job_number)+' | fgrep -o \'event_id = '+str(event_id)+'\'').read()
+		event_id_match=os.popen('at -c '+str(job_number)+' | grep -F -o \'event_id = '+str(event_id)+'\'').read()
 		if(len(event_id_match)>0):
 			#then clear out that job
 			os.popen('atrm '+str(job_number))

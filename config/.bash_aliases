@@ -50,11 +50,12 @@ alias egrep='grep -E --color=always'
 alias fgrep='grep -F --color=always'
 
 #helpful program extensions
-alias youtube-dl='youtube-dl --no-mtime'
+#alias youtube-dl='youtube-dl --no-mtime'
 alias ff-profile-select='firefox --new-instance --ProfileManager'
 alias firefox-profile-select='firefox --new-instance --ProfileManager'
 alias ff-wayland='MOZ_ENABLE_WAYLAND=1 firefox --new-instance --ProfileManager'
 alias pulseaudio-equalizer='qpaeq' # I always forget the name of the binary for this; this is the package name
+alias yt-dlp='yt-dlp --no-mtime --sponsorblock-remove default'
 
 #iff this is x11, then alias tmpv
 if [ $is_x11 == "true" ]

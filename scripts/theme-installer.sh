@@ -375,7 +375,7 @@ install_neu_way_ui_theme () {
 		#so we know where this script is even if the theme hasn't officially been fully installed yet
 		
 		#if the ubuntu version in use is greater than 22.04
-		if [ "$(./scripts/version-cmp.py "${ubuntu_version}" "22.04")" -gt 0 ]
+		if [ "$("${HOME}/.config/custom-themes/neu-way-ui/scripts/version-cmp.py" "${ubuntu_version}" "22.04")" -gt 0 ]
 		then
 			#global python installation via pip is deprecated; use debian packages instead
 			#python packages but installed via apt

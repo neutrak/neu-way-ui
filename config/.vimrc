@@ -132,6 +132,11 @@ set foldlevel=4
 	:endwhile
 :endfunction
 
+"copy to wayland clipboard with wl-copy
+:function! WLCopy()
+	:silent '<,'>w !wl-copy
+:endfunction
+
 
 " re-bind vim shortcuts which conflict with gnu screen (for example ctrl+a can't increment under screen, so I use ctrl+pgup and ctrl+pgdn for inc/dec)
 ":noremap <C-PageUp> <C-A>

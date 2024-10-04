@@ -366,7 +366,7 @@ install_neu_way_ui_theme () {
 		
 		#install all build dependencies before the userspace packages
 		pause
-		sudo apt-get install build-essential gcc clang cargo libxcb-* libgtk-layer-shell-dev jq python3 pipx at psmisc apparmor-utils fontconfig wget guile-2.2 python3-pip librust-libc-dev libssl-dev
+		sudo apt-get install build-essential gcc clang cargo libxcb-* libgtk-layer-shell-dev jq python3 pipx at psmisc apparmor-utils fontconfig wget guile-2.2 python3-pip librust-libc-dev libssl-dev cmake pkg-config libfontconfig-dev
 		
 		#install python libraries
 		pause
@@ -406,8 +406,8 @@ install_neu_way_ui_theme () {
 		pause
 		#NOTE: before disabling apparmor for mako notifier we have to first set it to complain mod
 		#because otherwise apparmor doesn't know the profile exists and can't set it to disabled
-		sudo aa-complain /etc/apparmor.d/fr.emersion.Mako
-		sudo aa-disable /etc/apparmor.d/fr.emersion.Mako
+#		sudo aa-complain /etc/apparmor.d/fr.emersion.Mako
+#		sudo aa-disable /etc/apparmor.d/fr.emersion.Mako
 		
 		#set snap to only run updates on saturday mornings (not every day)
 		#sudo snap set system refresh.timer=sat1,00:00-2:00
